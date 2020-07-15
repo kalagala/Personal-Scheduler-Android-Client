@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "5767011800",
+    "firebase_url": "https://personal-scheduler-4d17a.firebaseio.com",
+    "project_id": "personal-scheduler-4d17a",
+    "storage_bucket": "personal-scheduler-4d17a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5767011800:android:068d9d7f6904bd18bae6ad",
+        "android_client_info": {
+          "package_name": "com.kalagala.personalschechuler"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "5767011800-eaptv02rm3nspni1cnihvr53l779n1g1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kalagala.personalschechuler",
+            "certificate_hash": "e51beff5dd332a2de02cafb40945074efe1158af"
+          }
+        },
+        {
+          "client_id": "5767011800-6t0ktirqqfvva1cdbdkgk3lp25tddpa2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQ3NW6pm-yESWHLHdFySPVXhc98WB3KUU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "5767011800-6t0ktirqqfvva1cdbdkgk3lp25tddpa2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
