@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SplashActivity"
+            android:name=".activities.SplashActivity"
             android:theme="@style/AppTheme.NoActionBar"
             >
             <intent-filter>
@@ -21,10 +21,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Home"
-
-            >
-
+            android:name=".activities.ShowTasksActivity">
+        </activity>
+        <activity
+            android:name=".activities.CreateTaskActivity">
         </activity>
     </application>
 

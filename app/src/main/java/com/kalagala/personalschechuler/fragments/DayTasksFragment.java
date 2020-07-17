@@ -1,7 +1,6 @@
-package com.kalagala.personalschechuler;
+package com.kalagala.personalschechuler.fragments;
 
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kalagala.personalschechuler.R;
 import com.kalagala.personalschechuler.model.Task;
 
 import java.util.ArrayList;

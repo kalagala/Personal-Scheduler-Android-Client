@@ -1,4 +1,4 @@
-package com.kalagala.personalschechuler;
+package com.kalagala.personalschechuler.fragments;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -13,12 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.kalagala.personalschechuler.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

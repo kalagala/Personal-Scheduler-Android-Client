@@ -1,27 +1,26 @@
-package com.kalagala.personalschechuler;
+package com.kalagala.personalschechuler.activities;
 
 import android.os.Bundle;
-import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import java.time.DayOfWeek;
+import com.kalagala.personalschechuler.fragments.CreateTaskFrament;
+import com.kalagala.personalschechuler.R;
 
-public class Home extends AppCompatActivity {
-
+public class CreateTaskActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_create_task);
         FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.frament_container_home);
+        Fragment fragment = fm.findFragmentById(R.id.create_task_fragment_container);
         if (fragment == null){
-            fragment = DayFragment.newInstance();
+            fragment = CreateTaskFrament.newInstance();
             fm.beginTransaction()
-                    .add(R.id.frament_container_home, fragment)
+                    .add(R.id.create_task_fragment_container, fragment)
                     .commit();
         }
     }
