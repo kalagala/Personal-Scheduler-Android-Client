@@ -13,4 +13,12 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="level_3_text">
+        <item name="android:textColor">@color/level_3_color</item>
+    </style>
+
+    <style name="level_2_text">
+        <item name="android:textColor">@color/level_2_color</item>
+    </style>
+
 </resources>

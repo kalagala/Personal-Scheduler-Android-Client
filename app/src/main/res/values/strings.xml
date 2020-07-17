@@ -3,4 +3,22 @@
     <string name="enter_phone_number">Enter Phone Number to Continue</string>
     <string name="phone_sample">+255xxxxxxxxx</string>
     <string name="next">next</string>
+    <string name="by">BY</string>
+    <string name="app_owner">Kalagala Kapunda</string>
+    <string name="new_task">New Task</string>
+    <string name="add_task_description">"create new task "</string>
+    <string name="monday">Monday</string>
+    <string name="monday_short">Mon</string>
+    <string name="tuesday_short">Tue</string>
+    <string name="wednesday_short">Wed</string>
+    <string name="thursday_short">Thu</string>
+    <string name="friday_short">Fri</string>
+    <string name="saturday_short">Sat</string>
+    <string name="sunday_short">Sun</string>
+    <string name="tuesday">TUESDAY</string>
+    <string name="wednesday">WEDNESDAY</string>
+    <string name="thursday">THURSDAY</string>
+    <string name="friday">FRIDAY</string>
+    <string name="saturday">SATURDAY</string>
+    <string name="sunday">SUNDAY</string>
 </resources>

@@ -4,5 +4,7 @@
     <color name="colorPrimaryDark">#212121</color>
     <color name="colorAccent">#01CCFF</color>
     <color name="colorBackground">#212121</color>
-    <color name="colorText"> #F1F1F1</color>
+    <color name="colorText">#EAEAEA</color>
+    <color name="level_2_color">#9B9B9B</color>
+    <color name="level_3_color">#575757</color>
 </resources>
