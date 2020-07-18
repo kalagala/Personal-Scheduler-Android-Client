@@ -1,5 +1,6 @@
 package com.kalagala.personalschechuler.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kalagala.personalschechuler.R;
+import com.kalagala.personalschechuler.activities.EditTaskActivity;
 import com.kalagala.personalschechuler.model.Task;
 
 import java.util.ArrayList;
@@ -76,6 +78,13 @@ public class DayTasksFragment extends Fragment {
         ImageView alertType;
         public TaskHolder(@NonNull View itemView) {
             super(itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(), EditTaskActivity.class);
+                    startActivity(intent);
+                }
+            });
             mTaskTitle =(TextView) itemView.findViewById(R.id.task_title);
             mStartEndTime =(TextView) itemView.findViewById(R.id.start_end_time);
             alertType = (ImageView) itemView.findViewById(R.id.alert_type_icon);

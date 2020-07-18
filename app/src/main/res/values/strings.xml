@@ -50,4 +50,5 @@
     <string name="repeat">Repeat</string>
     <string name="alert">Alert</string>
     <string name="add_task">Add Task</string>
+    <string name="delete">Delete Task</string>
 </resources>
