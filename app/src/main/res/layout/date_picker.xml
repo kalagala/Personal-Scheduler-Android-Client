@@ -9,7 +9,8 @@
         android:id="@+id/day_of_week"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:paddingLeft="4dp"
+        style="@style/level_2_text"
         android:text="@string/day" />
 
     <EditText
@@ -17,8 +18,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:autofillHints=""
+        android:focusable="false"
         android:ems="10"
-        android:inputType="date"
+        android:inputType="text"
         android:labelFor="@+id/date_picker_container" />
 
 </LinearLayout>

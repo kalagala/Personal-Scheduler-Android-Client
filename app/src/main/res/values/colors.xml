@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#fffafafa</color>
     <color name="colorPrimaryDark">#fffafafa</color>
-    <color name="colorAccent">#01CCFF</color>
+    <color name="colorAccent">#0D8CE9</color>
     <color name="colorBackground">#fffafafa</color>
     <color name="colorText">#1B1B1B</color>
     <color name="level_2_color">#696969</color>
@@ -25,6 +25,7 @@
     <color name="purple">#910AD0</color>
     <color name="purple_dark">#56007F</color>
     <color name="pink">#F25484</color>
+    <color name="midnight_blue">#2E3D54</color>
     <color name="pink_dark">#B44366</color>
 
 </resources>

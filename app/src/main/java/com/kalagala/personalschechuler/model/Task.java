@@ -19,7 +19,7 @@ public class Task {
     public Task(){
         taskTitle="New Task";
         alertType = AlertType.NOTIFICATION;
-        taskRecurrence = Recurrence.DAILY;
+        taskRecurrence = Recurrence.ONCE;
         mTaskColor = TaskColor.RED;
         taskStartTime = null;
         taskEndTime = null;
