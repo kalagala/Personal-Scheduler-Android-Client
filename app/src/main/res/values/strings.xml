@@ -8,17 +8,33 @@
     <string name="new_task">New Task</string>
     <string name="add_task_description">"create new task "</string>
     <string name="monday">Monday</string>
-    <string name="monday_short">Mon</string>
-    <string name="tuesday_short">Tue</string>
-    <string name="wednesday_short">Wed</string>
-    <string name="thursday_short">Thu</string>
-    <string name="friday_short">Fri</string>
-    <string name="saturday_short">Sat</string>
-    <string name="sunday_short">Sun</string>
     <string name="tuesday">TUESDAY</string>
     <string name="wednesday">WEDNESDAY</string>
     <string name="thursday">THURSDAY</string>
     <string name="friday">FRIDAY</string>
     <string name="saturday">SATURDAY</string>
     <string name="sunday">SUNDAY</string>
+    <string-array name="day_of_week">
+        <item name="monday">Monday</item>
+        <item name="tuesday">TUESDAY</item>
+        <item name="wednesday">WEDNESDAY</item>
+        <item name="thursday">THURSDAY</item>
+        <item name="friday">FRIDAY</item>
+        <item name="saturday">SATURDAY</item>
+        <item name="sunday">SUNDAY</item>
+    </string-array>
+    <string-array name="days_of_week_short">
+        <item name="monday_short">Mon</item>
+        <item name="tuesday_short">Tue</item>
+        <item name="wednesday_short">Wed</item>
+        <item name="thursday_short">Thu</item>
+        <item name="friday_short">Fri</item>
+        <item name="saturday_short">Sat</item>
+        <item name="sunday_short">Sun</item>
+    </string-array>
+
+       <string name="title">Title</string>
+    <string name="time">Time</string>
+    <string name="to">TO</string>
+    <string name="day">Day</string>
 </resources>
