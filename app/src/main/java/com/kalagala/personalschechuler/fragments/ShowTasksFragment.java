@@ -10,33 +10,40 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kalagala.personalschechuler.R;
+import com.kalagala.personalschechuler.Utils;
 import com.kalagala.personalschechuler.activities.EditTaskActivity;
 import com.kalagala.personalschechuler.model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DayTasksFragment extends Fragment {
+public class ShowTasksFragment extends Fragment {
     RecyclerView mRecyclerView;
+    TextView mNoTasksTextview;
     List<Task> tasks= new ArrayList<>();
-    public static DayTasksFragment newInstance(){
-        return new DayTasksFragment();
+    public static ShowTasksFragment newInstance(){
+        return new ShowTasksFragment();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
          super.onCreateView(inflater, container, savedInstanceState);
-         for(int i=0; i<10; i++){
-            tasks.add(new Task());
-         }
+//         for(int i=0; i<10; i++){
+//            tasks.add(new Task());
+//         }
          View view =inflater.inflate(R.layout.day_tasks_fragment, container, false);
          mRecyclerView =(RecyclerView) view.findViewById(R.id.tasks_container);
+         mNoTasksTextview = (TextView) view.findViewById(R.id.not_task_text);
+         if (tasks.size()!=0){
+             mNoTasksTextview.setVisibility(View.INVISIBLE);
+         }
          mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
          mRecyclerView.setAdapter(new TasksAdapter(tasks));
          return  view;
@@ -73,6 +80,7 @@ public class DayTasksFragment extends Fragment {
     }
 
     public  class TaskHolder extends RecyclerView.ViewHolder{
+        CardView taskCard;
         TextView mTaskTitle;
         TextView mStartEndTime;
         ImageView alertType;
@@ -88,12 +96,16 @@ public class DayTasksFragment extends Fragment {
             mTaskTitle =(TextView) itemView.findViewById(R.id.task_title);
             mStartEndTime =(TextView) itemView.findViewById(R.id.start_end_time);
             alertType = (ImageView) itemView.findViewById(R.id.alert_type_icon);
+            taskCard = (CardView) itemView.findViewById(R.id.task_card);
         }
 
         void bindTask(Task task){
             mTaskTitle.setText(task.getTaskTitle());
 //            String startTime = task.getTaskStartTime().toString();
 //            mStartEndTime.setText(startTime);
+
+            taskCard.setCardBackgroundColor(Utils.getColorResourceForTaskColor(task.getTaskColor()));
+
         }
     }
 }

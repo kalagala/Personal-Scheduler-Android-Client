@@ -166,7 +166,7 @@ public class DayFragment extends Fragment {
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-            return DayTasksFragment.newInstance();
+            return ShowTasksFragment.newInstance();
         }
 
         @Override

@@ -9,6 +9,15 @@ import java.time.DayOfWeek;
 public class Task {
     private String taskTitle;
     private AlertType alertType;
+
+    public TaskColor getTaskColor() {
+        return mTaskColor;
+    }
+
+    public void setTaskColor(TaskColor taskColor) {
+        mTaskColor = taskColor;
+    }
+
     private TaskColor mTaskColor;
     private Recurrence taskRecurrence;
     private Time taskStartTime;
@@ -20,7 +29,7 @@ public class Task {
         taskTitle="New Task";
         alertType = AlertType.NOTIFICATION;
         taskRecurrence = Recurrence.ONCE;
-        mTaskColor = TaskColor.RED;
+        mTaskColor = TaskColor.randomColor();
         taskStartTime = null;
         taskEndTime = null;
         dayOfWeek = null;
