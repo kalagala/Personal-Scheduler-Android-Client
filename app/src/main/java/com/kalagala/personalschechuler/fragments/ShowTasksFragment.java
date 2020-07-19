@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.kalagala.personalschechuler.R;
 import com.kalagala.personalschechuler.Utils;
-import com.kalagala.personalschechuler.activities.EditTaskActivity;
+import com.kalagala.personalschechuler.activities.CreateTaskActivity;
 import com.kalagala.personalschechuler.model.Task;
 
 import java.util.ArrayList;
@@ -89,7 +89,10 @@ public class ShowTasksFragment extends Fragment {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(getActivity(), EditTaskActivity.class);
+                    Intent intent = new Intent(getActivity(), CreateTaskActivity.class);
+                    Bundle args = new Bundle();
+                    args.putInt(CreateTaskActivity.ACTIVITY_PURPOSE, CreateTaskActivity.ARG_EDIT_TASK);
+                    intent.putExtras(args);
                     startActivity(intent);
                 }
             });

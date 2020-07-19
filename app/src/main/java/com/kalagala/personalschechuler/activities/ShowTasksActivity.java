@@ -25,6 +25,9 @@ public class ShowTasksActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ShowTasksActivity.this, CreateTaskActivity.class);
+                Bundle args = new Bundle();
+                args.putInt(CreateTaskActivity.ACTIVITY_PURPOSE, CreateTaskActivity.ARG_CREATE_TASK);
+                intent.putExtra(CreateTaskActivity.ACTIVITY_PURPOSE, CreateTaskActivity.ARG_CREATE_TASK);
                 startActivity(intent);
             }
         });

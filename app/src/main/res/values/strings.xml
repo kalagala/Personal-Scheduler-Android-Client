@@ -24,8 +24,8 @@
         <item name="sunday">Sunday</item>
     </string-array>
     <string-array name="repeat_mode">
-        <item name="daily">Daily</item>
         <item name="once">Once</item>
+        <item name="daily">Daily</item>
         <item name="only_on">Only On</item>
     </string-array>
     <string-array name="alert_mode">
@@ -52,4 +52,17 @@
     <string name="add_task">Add Task</string>
     <string name="delete">Delete Task</string>
     <string name="no_task">You have no tasks this day</string>
+    <string name="set_task_title">Set Task Title</string>
+    <string name="no_task_title_message">Please add a task title</string>
+    <string name="ok">Ok</string>
+    <string name="set_task_start_time">Set Task start time</string>
+    <string name="no_start_time_message">Task can not be created without a start time</string>
+    <string name="set_task_end_time">Set Task End Time</string>
+    <string name="no_end_time_message">Task can not be created without an ending time</string>
+    <string name="task_end_time_can_not_be_same">Invalid end time</string>
+    <string name="same_end_time_message">Task end time can not be the same as task start time</string>
+    <string name="invalid_time">Invalid Time</string>
+    <string name="task_end_time_before_start">Task endtime can not be before start time</string>
+    <string name="empty_date">Please specify date</string>
+    <string name="empty_date_message">Tasks occuring once needs a specific date</string>
 </resources>

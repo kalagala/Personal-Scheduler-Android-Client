@@ -14,7 +14,7 @@
         android:layout_weight="0.7">
 
         <TextView
-            android:id="@+id/taskTitleView"
+            android:id="@+id/task_title_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -47,7 +47,7 @@
                 android:textStyle="normal" />
 
             <EditText
-                android:id="@+id/title_edit_text"
+                android:id="@+id/task_title_editor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -145,6 +145,7 @@
             <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/task_color_chooser_container"
                 android:gravity="center"
                 android:orientation="horizontal">
 

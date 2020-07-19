@@ -6,16 +6,20 @@ import java.util.List;
 import java.util.Random;
 
 public enum  TaskColor {
-    RED(1),
-    YELLOW(2),
-    ORANGE(3),
-    GREEN(4),
-    LIGHT_BLUE(5),
-    BLUE(6),
-    PURPLE(7),
-    PINK(8);
+    RED(0),
+    YELLOW(1),
+    ORANGE(2),
+    GREEN(3),
+    LIGHT_BLUE(4),
+    BLUE(5),
+    PURPLE(6),
+    PINK(7);
 
-    public final int colorId;
+    public int getColorId() {
+        return colorId;
+    }
+
+    private final int colorId;
     private TaskColor(int id){
         colorId=id;
     }
@@ -26,5 +30,13 @@ public enum  TaskColor {
 
     public static TaskColor randomColor()  {
         return VALUES.get(RANDOM.nextInt(SIZE));
+    }
+    public static TaskColor getTaskColorWithId(int id){
+        for (TaskColor taskColor: TaskColor.values()){
+            if (taskColor.getColorId() == id){
+                return taskColor;
+            }
+        }
+        return null;
     }
 }
