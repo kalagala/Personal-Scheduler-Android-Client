@@ -1,7 +1,9 @@
 package com.kalagala.personalschechuler.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,16 +23,34 @@ import com.kalagala.personalschechuler.R;
 import com.kalagala.personalschechuler.Utils;
 import com.kalagala.personalschechuler.activities.CreateTaskActivity;
 import com.kalagala.personalschechuler.model.Task;
+import com.kalagala.personalschechuler.viewmodel.TaskViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ShowTasksFragment extends Fragment {
-    RecyclerView mRecyclerView;
-    TextView mNoTasksTextview;
-    List<Task> tasks= new ArrayList<>();
+    private RecyclerView mRecyclerView;
+    private TextView mNoTasksTextview;
+    private TaskViewModel taskViewModel;
+    private TaskAdapter taskAdapter;
+    private List<Task> mTasks = new ArrayList<>();
     public static ShowTasksFragment newInstance(){
         return new ShowTasksFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        taskAdapter = new TaskAdapter(getActivity());
+        taskViewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
+        taskViewModel.getAllTasks().observe(this, new Observer<List<Task>>() {
+            @Override
+            public void onChanged(List<Task> tasks) {
+                Log.d("ShowTask", "found "+tasks.size()+" tasks from livedata");
+                taskAdapter.setTasks(tasks);
+                mTasks = tasks;
+            }
+        });
     }
 
     @Nullable
@@ -41,11 +63,17 @@ public class ShowTasksFragment extends Fragment {
          View view =inflater.inflate(R.layout.day_tasks_fragment, container, false);
          mRecyclerView =(RecyclerView) view.findViewById(R.id.tasks_container);
          mNoTasksTextview = (TextView) view.findViewById(R.id.not_task_text);
-         if (tasks.size()!=0){
-             mNoTasksTextview.setVisibility(View.INVISIBLE);
-         }
+            taskViewModel.getAllTasks().observe(this, new Observer<List<Task>>() {
+                @Override
+                public void onChanged(List<Task> tasks) {
+                    if (tasks.size()!=0){
+                        mNoTasksTextview.setVisibility(View.INVISIBLE);
+                    }
+                }
+            });
+
          mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-         mRecyclerView.setAdapter(new TasksAdapter(tasks));
+         mRecyclerView.setAdapter(taskAdapter);
          return  view;
 
     }
@@ -53,13 +81,23 @@ public class ShowTasksFragment extends Fragment {
 
 
 
-    class TasksAdapter extends RecyclerView.Adapter<TaskHolder>{
+    class TaskAdapter extends RecyclerView.Adapter<TaskHolder>{
         List<Task> mTasks;
+        LayoutInflater layoutInflater;
 
-        TasksAdapter(List<Task> tasks){
-            mTasks = tasks;
+//        TaskAdapter(List<Task> tasks){
+//            mTasks = tasks;
+//        }
+
+        TaskAdapter(Context context){
+            layoutInflater.from(context);
+
         }
 
+        void setTasks(List<Task> tasks){
+            mTasks = tasks;
+            notifyDataSetChanged();
+        }
         @NonNull
         @Override
         public TaskHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -70,12 +108,17 @@ public class ShowTasksFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull TaskHolder holder, int position) {
-            holder.bindTask(tasks.get(position));
+            holder.bindTask(ShowTasksFragment.this.mTasks.get(position));
         }
 
         @Override
         public int getItemCount() {
-            return tasks.size();
+            if (mTasks != null){
+                return ShowTasksFragment.this.mTasks.size();
+            }else {
+                return 0;
+            }
+
         }
     }
 

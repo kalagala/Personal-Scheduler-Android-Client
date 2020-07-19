@@ -31,6 +31,7 @@ android {
 dependencies {
     def room_version = "2.2.5"
     def rxjava_version = "3.0.4"
+    def archLifecycleVersion="2.2.0"
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
@@ -40,6 +41,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     implementation "androidx.room:room-runtime:$room_version"
     implementation 'android.arch.persistence.room:rxjava2:1.1.1'
+    implementation "android.arch.lifecycle:extensions:$archLifecycleVersion"
+    annotationProcessor "android.arch.lifecycle:compiler:$archLifecycleVersion"
+
     implementation "io.reactivex.rxjava3:rxjava:$rxjava_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     testImplementation 'junit:junit:4.12'

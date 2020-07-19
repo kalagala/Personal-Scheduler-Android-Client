@@ -1,5 +1,6 @@
 package com.kalagala.personalschechuler.fragments;
 
+import android.app.Application;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
@@ -31,6 +32,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.room.Room;
 
 import com.kalagala.personalschechuler.R;
@@ -40,6 +42,8 @@ import com.kalagala.personalschechuler.model.TaskRecurrence;
 import com.kalagala.personalschechuler.model.Task;
 import com.kalagala.personalschechuler.model.TaskColor;
 import com.kalagala.personalschechuler.model.database.AppPersistentData;
+import com.kalagala.personalschechuler.model.database.TaskRepository;
+import com.kalagala.personalschechuler.viewmodel.TaskViewModel;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -52,22 +56,31 @@ public class CreateTaskFrament extends Fragment{
     public static final int ARG_CREATE_TASK =2;
     Task task;
 
-    TextView taskTitleDisplay;
-    EditText taskTitle;
-    EditText taskStartTime;
-    EditText taskEndTime;
-    EditText taskDate;
-    RadioGroup taskColorChooserContainer;
-    Spinner repeatType;
-    Spinner alertType;
-    Spinner dayOfWeek;
-    LinearLayout datePickerContainer;
-    LinearLayout dayOfTheWeekPickerContainer;
-    Button addTaskButton;
+    private TextView taskTitleDisplay;
+    private EditText taskTitle;
+    private EditText taskStartTime;
+    private EditText taskEndTime;
+    private EditText taskDate;
+    private RadioGroup taskColorChooserContainer;
+    private Spinner repeatType;
+    private Spinner alertType;
+    private Spinner dayOfWeek;
+    private LinearLayout datePickerContainer;
+    private LinearLayout dayOfTheWeekPickerContainer;
+    private Button addTaskButton;
+
+    private TaskViewModel taskViewModel;
 
 
     public static Fragment newInstance(){
         return new CreateTaskFrament();
+    }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        taskViewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
     }
 
     @Nullable
@@ -280,17 +293,7 @@ public class CreateTaskFrament extends Fragment{
 
     private boolean addTask() {
         if (dataIsValid()){
-            class InsertData extends AsyncTask<Void, Void, Void> {
-
-                @Override
-                protected Void doInBackground(Void... voids) {
-                    AppPersistentData db = Room.databaseBuilder(getActivity(),
-                            AppPersistentData.class, "task").build();
-
-                    db.taskDao().insertTask(task);
-                    return null;
-                }
-            }
+            taskViewModel.insert(task);
             Log.d("CreateTaskFragment", "data inserted successfully");
 
             return true;

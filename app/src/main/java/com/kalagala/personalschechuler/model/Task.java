@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
 
-@Entity
+@Entity(tableName = "task")
 public class Task {
     private String taskTitle;
     private AlertType alertType;
@@ -52,10 +52,10 @@ public class Task {
         alertType = AlertType.NOTIFICATION;
         taskRecurrence = TaskRecurrence.DAILY;
         mTaskColor = TaskColor.PURPLE;
-        taskStartTime = null;
-        taskEndTime = null;
-        dayOfWeek = null;
-        date = null;
+        taskStartTime = LocalTime.now();
+        taskEndTime = LocalTime.now();
+        dayOfWeek = DayOfWeek.MONDAY;
+        date = LocalDate.now();
         taskId = UUID.randomUUID();
 
     }
