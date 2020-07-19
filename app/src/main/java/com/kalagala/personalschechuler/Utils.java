@@ -7,7 +7,6 @@ public class Utils {
     public static int getColorResourceForTaskColor(TaskColor color){
         switch (color){
             case RED: return R.color.red;
-            case BLUE: return R.color.blue;
             case PINK: return R.color.pink;
             case GREEN: return R.color.green;
             case ORANGE: return R.color.orange;

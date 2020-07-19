@@ -51,7 +51,7 @@ public class Task {
         taskTitle="New Task";
         alertType = AlertType.NOTIFICATION;
         taskRecurrence = TaskRecurrence.DAILY;
-        mTaskColor = TaskColor.randomColor();
+        mTaskColor = TaskColor.PURPLE;
         taskStartTime = null;
         taskEndTime = null;
         dayOfWeek = null;

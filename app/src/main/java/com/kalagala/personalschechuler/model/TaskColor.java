@@ -11,9 +11,8 @@ public enum  TaskColor {
     ORANGE(2),
     GREEN(3),
     LIGHT_BLUE(4),
-    BLUE(5),
-    PURPLE(6),
-    PINK(7);
+    PURPLE(5),
+    PINK(6);
 
     public int getColorId() {
         return colorId;

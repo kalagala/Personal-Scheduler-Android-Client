@@ -65,4 +65,5 @@
     <string name="task_end_time_before_start">Task endtime can not be before start time</string>
     <string name="empty_date">Please specify date</string>
     <string name="empty_date_message">Tasks occuring once needs a specific date</string>
+    <string name="task_create_successfully">Task Created successfully</string>
 </resources>

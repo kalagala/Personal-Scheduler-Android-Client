@@ -11,5 +11,5 @@ import com.kalagala.personalschechuler.model.TaskDao;
 @Database(entities = {Task.class}, version=1)
 @TypeConverters({AppTypeConvertors.class})
 public abstract class AppPersistentData extends RoomDatabase {
-    public abstract TaskDao userDao();
+    public abstract TaskDao taskDao();
 }

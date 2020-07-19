@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -23,6 +24,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -55,7 +57,7 @@ public class CreateTaskFrament extends Fragment{
     EditText taskStartTime;
     EditText taskEndTime;
     EditText taskDate;
-    RadioGroup taskColor;
+    RadioGroup taskColorChooserContainer;
     Spinner repeatType;
     Spinner alertType;
     Spinner dayOfWeek;
@@ -85,7 +87,7 @@ public class CreateTaskFrament extends Fragment{
         taskStartTime = (EditText) view.findViewById(R.id.task_start_time);
         taskEndTime = (EditText) view.findViewById(R.id.task_end_time);
         taskDate = (EditText) view.findViewById(R.id.date_picker);
-        taskColor = (RadioGroup) view.findViewById(R.id.task_color_chooser_container);
+        taskColorChooserContainer = (RadioGroup) view.findViewById(R.id.task_color_chooser_container);
         repeatType =(Spinner) view.findViewById(R.id.repeat_mode_picker);
         alertType = (Spinner) view.findViewById(R.id.alert_mode_picker);
         dayOfWeek = (Spinner) view.findViewById(R.id.day_of_week_picker);
@@ -99,6 +101,10 @@ public class CreateTaskFrament extends Fragment{
                 if(addTask()){
                     Intent intent = new Intent(getActivity(), ShowTasksActivity.class);
                     startActivity(intent);
+
+                    Toast toast = Toast.makeText(getActivity()
+                            , R.string.task_create_successfully, Toast.LENGTH_SHORT);
+                    toast.show();
                     getActivity().finish();
                 }
             }
@@ -196,7 +202,7 @@ public class CreateTaskFrament extends Fragment{
             }
         });
 
-        taskColor.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        taskColorChooserContainer.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 int checkedButtonId = radioGroup.getCheckedRadioButtonId();
@@ -274,8 +280,21 @@ public class CreateTaskFrament extends Fragment{
 
     private boolean addTask() {
         if (dataIsValid()){
-            AppPersistentData db = Room.databaseBuilder(getActivity(),
-                    AppPersistentData.class, "task").build();
+            class InsertData extends AsyncTask<Void, Void, Void> {
+
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    AppPersistentData db = Room.databaseBuilder(getActivity(),
+                            AppPersistentData.class, "task").build();
+
+                    db.taskDao().insertTask(task);
+                    return null;
+                }
+            }
+            Log.d("CreateTaskFragment", "data inserted successfully");
+
+            return true;
+
         }
 
         return false;
@@ -349,7 +368,7 @@ public class CreateTaskFrament extends Fragment{
     }
 
     private void setAppropriateInputFields() {
-        //((RadioButton) taskColor.getChildAt(task.getTaskColor().getColorId())).setChecked(true);
+        ((RadioButton) taskColorChooserContainer.getChildAt(task.getTaskColor().getColorId())).setChecked(true);
         switch (task.getTaskRecurrence()){
             case ONCE:
 
