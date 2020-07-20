@@ -38,7 +38,7 @@ public class DayFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        return  inflater.inflate(R.layout.frament_home, container, false);
+        return  inflater.inflate(R.layout.frament_show_tasks, container, false);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

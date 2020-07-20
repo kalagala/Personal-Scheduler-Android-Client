@@ -2,6 +2,7 @@ package com.kalagala.personalschechuler.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.kalagala.personalschechuler.activities.CreateTaskActivity;
 import com.kalagala.personalschechuler.model.Task;
 import com.kalagala.personalschechuler.viewmodel.TaskViewModel;
 
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,7 +128,8 @@ public class ShowTasksFragment extends Fragment {
         CardView taskCard;
         TextView mTaskTitle;
         TextView mStartEndTime;
-        ImageView alertType;
+        ImageView alertTypeIcon;
+        TextView recuranceTypeDisplayer;
         public TaskHolder(@NonNull View itemView) {
             super(itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -141,17 +144,51 @@ public class ShowTasksFragment extends Fragment {
             });
             mTaskTitle =(TextView) itemView.findViewById(R.id.task_title);
             mStartEndTime =(TextView) itemView.findViewById(R.id.start_end_time);
-            alertType = (ImageView) itemView.findViewById(R.id.alert_type_icon);
+            alertTypeIcon = (ImageView) itemView.findViewById(R.id.alert_type_icon);
+            recuranceTypeDisplayer = (TextView) itemView.findViewById(R.id.recurance_displayer);
             taskCard = (CardView) itemView.findViewById(R.id.task_card);
         }
 
         void bindTask(Task task){
             mTaskTitle.setText(task.getTaskTitle());
+            recuranceTypeDisplayer.setText(getRecuranceText(task));
+            alertTypeIcon.setImageDrawable(getResources().getDrawable(getAlertTypeIcon(task)));
 //            String startTime = task.getTaskStartTime().toString();
 //            mStartEndTime.setText(startTime);
 
-            taskCard.setCardBackgroundColor(Utils.getColorResourceForTaskColor(task.getTaskColor()));
+            //taskCard.setCardBackgroundColor(Utils.getColorResourceForTaskColor(task.getTaskColor()));
 
+        }
+
+        private int getAlertTypeIcon(Task task) {
+            switch (task.getAlertType()){
+                case ALARM: return R.drawable.ic_baseline_access_alarm_24;
+                case SILENT: return R.drawable.silence_icon;
+                case NOTIFICATION: return R.drawable.notification_icon;
+            }
+            return 0;
+        }
+
+        private String getRecuranceText(Task task) {
+            switch (task.getTaskRecurrence()){
+                case ONLY_ON:return getWeekDayDisplayString(task);
+                case DAILY: return "Everyday";
+                case ONCE: return task.getDate().toString();
+            }
+            return null;
+        }
+
+        private String getWeekDayDisplayString(Task task) {
+            switch (task.getDayOfWeek()){
+                case FRIDAY: return "Fridays";
+                case MONDAY: return "Mondays";
+                case TUESDAY: return "Tuesdays";
+                case WEDNESDAY:return "Wednesdays";
+                case THURSDAY: return "Thursdays";
+                case SUNDAY: return "Sundays";
+                case SATURDAY: return "Saturdays";
+            }
+            return null;
         }
     }
 }

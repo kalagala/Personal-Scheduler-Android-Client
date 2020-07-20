@@ -49,6 +49,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Calendar;
+import java.util.List;
 
 public class CreateTaskFrament extends Fragment{
     public static final String FRAGMENT_PURPOSE="Fragment_Purpose";
@@ -304,7 +305,7 @@ public class CreateTaskFrament extends Fragment{
     }
 
     private boolean dataIsValid() {
-        if(checkTaskTitle() && checKTaskStartTime() && checkTaskEndTime()){
+        if(checkTaskTitle() && checKTaskStartTime() && checkTaskEndTime()&& checkAvailabilyOfTimeWindow()){
             if (task.getTaskRecurrence() == TaskRecurrence.ONCE){
                 return checkTaskDate();
             }
@@ -312,6 +313,17 @@ public class CreateTaskFrament extends Fragment{
         }else {
             return false;
         }
+    }
+
+    private boolean checkAvailabilyOfTimeWindow() {
+        List<Task> allTasks = (new TaskRepository(getActivity().getApplication()).getAllTasks()).getValue();
+//        for (Task taskFromDb: allTasks){
+//            switch (task.getTaskRecurrence()){
+//                case ONLY_ON:
+//                    //TODO figure out how to check time conflicts
+//            }
+//        }
+        return true;
     }
 
     private boolean checkTaskDate() {

@@ -39,7 +39,6 @@ public class TaskRepository {
 
         @Override
         protected Void doInBackground(Task... tasks) {
-            Log.d("TaskRepository", "Inserting task with id "+tasks[0].getTaskId().toString());
             taskDao.insertTask(tasks[0]);
             return null;
         }
