@@ -1,4 +1,4 @@
-package com.kalagala.personalschechuler.model.database;
+package com.kalagala.personalschechuler.database;
 
 import android.app.Application;
 import android.os.AsyncTask;
@@ -12,6 +12,7 @@ import com.kalagala.personalschechuler.model.TaskDao;
 import java.util.List;
 
 public class TaskRepository {
+    private static final String TAG = "TaskRepository";
 
     private TaskDao taskDao;
     private LiveData<List<Task>> allTasks;
@@ -23,6 +24,12 @@ public class TaskRepository {
     }
 
     public LiveData<List<Task>> getAllTasks() {
+        if (allTasks.getValue() != null){
+            for (Task task: allTasks.getValue()){
+                Log.d(TAG, "here is a task from db "+task);
+            }
+        }
+
         return allTasks;
     }
 

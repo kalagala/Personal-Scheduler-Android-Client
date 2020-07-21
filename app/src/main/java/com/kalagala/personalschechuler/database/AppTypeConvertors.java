@@ -1,4 +1,4 @@
-package com.kalagala.personalschechuler.model.database;
+package com.kalagala.personalschechuler.database;
 
 import androidx.room.TypeConverter;
 

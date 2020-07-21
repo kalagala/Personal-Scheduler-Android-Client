@@ -1,17 +1,16 @@
-package com.kalagala.personalschechuler.model.database;
+package com.kalagala.personalschechuler.database;
 
 import android.content.Context;
 
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.Database;
-import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
 import com.kalagala.personalschechuler.model.Task;
 import com.kalagala.personalschechuler.model.TaskDao;
 
-@Database(entities = {Task.class}, version=2)
+@Database(entities = {Task.class}, version=3)
 @TypeConverters({AppTypeConvertors.class})
 public abstract class AppPersistentData extends RoomDatabase {
     private static AppPersistentData INSTANCE;

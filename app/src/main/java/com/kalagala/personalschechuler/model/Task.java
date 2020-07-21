@@ -12,8 +12,73 @@ import java.util.UUID;
 
 @Entity(tableName = "task")
 public class Task {
+    @PrimaryKey
+    @NonNull
+    private UUID taskId;
+
+    @ColumnInfo(name = "task_name")
     private String taskTitle;
+
+    @ColumnInfo(name = "task_alert_type")
     private AlertType alertType;
+
+    @ColumnInfo(name = "task_color")
+    private TaskColor mTaskColor;
+
+    @ColumnInfo(name = "task_recurance")
+    private TaskRecurrence taskRecurrence;
+
+    @ColumnInfo(name = "task_start_time")
+    private LocalTime taskStartTime;
+
+    @ColumnInfo(name = "task_end_time")
+    private LocalTime taskEndTime;
+
+    @ColumnInfo(name = "day_of_week")
+    private DayOfWeek dayOfWeek;
+
+    @ColumnInfo(name = "date")
+    private LocalDate date;
+
+    public Task(Task task){
+        taskTitle = task.taskTitle;
+        taskId = task.taskId;
+        alertType = task.alertType;
+        taskRecurrence = task.taskRecurrence;
+        mTaskColor = task.mTaskColor;
+        taskStartTime = task.taskStartTime;
+        taskEndTime = task.taskEndTime;
+        dayOfWeek = task.dayOfWeek;
+        date = task.date;
+
+    }
+    public Task(){
+        taskTitle="New Task";
+        alertType = AlertType.NOTIFICATION;
+        taskRecurrence = TaskRecurrence.DAILY;
+        mTaskColor = TaskColor.PURPLE;
+        taskStartTime = LocalTime.now();
+        taskEndTime = LocalTime.now();
+        dayOfWeek = DayOfWeek.MONDAY;
+        date = LocalDate.now();
+        taskId = UUID.randomUUID();
+
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "taskId=" + taskId +
+                ", taskTitle='" + taskTitle + '\'' +
+                ", alertType=" + alertType +
+                ", mTaskColor=" + mTaskColor +
+                ", taskRecurrence=" + taskRecurrence +
+                ", taskStartTime=" + taskStartTime +
+                ", taskEndTime=" + taskEndTime +
+                ", dayOfWeek=" + dayOfWeek +
+                ", date=" + date +
+                '}';
+    }
 
     public UUID getTaskId() {
         return taskId;
@@ -31,34 +96,6 @@ public class Task {
         this.mTaskColor = mTaskColor;
     }
 
-    @PrimaryKey
-    @NonNull
-    private UUID taskId;
-    @ColumnInfo(name = "task_color")
-    private TaskColor mTaskColor;
-    @ColumnInfo(name = "task_recurance")
-    private TaskRecurrence taskRecurrence;
-    @ColumnInfo(name = "task_start_time")
-    private LocalTime taskStartTime;
-    @ColumnInfo(name = "task_end_time")
-    private LocalTime taskEndTime;
-    @ColumnInfo(name = "day_of_week")
-    private DayOfWeek dayOfWeek;
-    @ColumnInfo(name = "date")
-    private LocalDate date;
-
-    public Task(){
-        taskTitle="New Task";
-        alertType = AlertType.NOTIFICATION;
-        taskRecurrence = TaskRecurrence.DAILY;
-        mTaskColor = TaskColor.PURPLE;
-        taskStartTime = LocalTime.now();
-        taskEndTime = LocalTime.now();
-        dayOfWeek = DayOfWeek.MONDAY;
-        date = LocalDate.now();
-        taskId = UUID.randomUUID();
-
-    }
 
     public TaskColor getTaskColor() {
         return mTaskColor;

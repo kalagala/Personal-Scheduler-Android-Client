@@ -2,7 +2,6 @@ package com.kalagala.personalschechuler.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,12 +20,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kalagala.personalschechuler.R;
-import com.kalagala.personalschechuler.Utils;
 import com.kalagala.personalschechuler.activities.CreateTaskActivity;
 import com.kalagala.personalschechuler.model.Task;
 import com.kalagala.personalschechuler.viewmodel.TaskViewModel;
 
-import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,9 +122,11 @@ public class ShowTasksFragment extends Fragment {
     }
 
     public  class TaskHolder extends RecyclerView.ViewHolder{
+        private static final String TAG = "TaskHolder";
         CardView taskCard;
         TextView mTaskTitle;
-        TextView mStartEndTime;
+        TextView taskStartTime;
+        TextView taskEndTime;
         ImageView alertTypeIcon;
         TextView recuranceTypeDisplayer;
         public TaskHolder(@NonNull View itemView) {
@@ -143,16 +142,22 @@ public class ShowTasksFragment extends Fragment {
                 }
             });
             mTaskTitle =(TextView) itemView.findViewById(R.id.task_title);
-            mStartEndTime =(TextView) itemView.findViewById(R.id.start_end_time);
+            //startEndTimeContainer =(TextView) itemView.findViewById(R.id.start_end_time);
+            taskStartTime =(TextView) itemView.findViewById(R.id.task_start_time);
+            taskEndTime = (TextView) itemView.findViewById(R.id.task_end_time);
             alertTypeIcon = (ImageView) itemView.findViewById(R.id.alert_type_icon);
             recuranceTypeDisplayer = (TextView) itemView.findViewById(R.id.recurance_displayer);
+
             taskCard = (CardView) itemView.findViewById(R.id.task_card);
         }
 
         void bindTask(Task task){
+            Log.d(TAG, "received a task "+task);
             mTaskTitle.setText(task.getTaskTitle());
             recuranceTypeDisplayer.setText(getRecuranceText(task));
-            alertTypeIcon.setImageDrawable(getResources().getDrawable(getAlertTypeIcon(task)));
+            taskStartTime.setText(task.getTaskStartTime().toString());
+            taskEndTime.setText(task.getTaskEndTime().toString());
+            alertTypeIcon.setImageDrawable(getActivity().getDrawable(getAlertTypeIcon(task)));
 //            String startTime = task.getTaskStartTime().toString();
 //            mStartEndTime.setText(startTime);
 

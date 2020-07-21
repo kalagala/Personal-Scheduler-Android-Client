@@ -1,11 +1,9 @@
 package com.kalagala.personalschechuler.fragments;
 
-import android.app.Application;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -33,7 +31,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.room.Room;
 
 import com.kalagala.personalschechuler.R;
 import com.kalagala.personalschechuler.activities.ShowTasksActivity;
@@ -41,8 +38,7 @@ import com.kalagala.personalschechuler.model.AlertType;
 import com.kalagala.personalschechuler.model.TaskRecurrence;
 import com.kalagala.personalschechuler.model.Task;
 import com.kalagala.personalschechuler.model.TaskColor;
-import com.kalagala.personalschechuler.model.database.AppPersistentData;
-import com.kalagala.personalschechuler.model.database.TaskRepository;
+import com.kalagala.personalschechuler.database.TaskRepository;
 import com.kalagala.personalschechuler.viewmodel.TaskViewModel;
 
 import java.time.DayOfWeek;
@@ -55,19 +51,20 @@ public class CreateTaskFrament extends Fragment{
     public static final String FRAGMENT_PURPOSE="Fragment_Purpose";
     public static final int ARG_EDIT_TASK = 1;
     public static final int ARG_CREATE_TASK =2;
+    private static final String TAG ="CreateTaskFragment";
     Task task;
 
-    private TextView taskTitleDisplay;
-    private EditText taskTitle;
-    private EditText taskStartTime;
-    private EditText taskEndTime;
-    private EditText taskDate;
+    private TextView taskTitleDisplayTextView;
+    private EditText taskTitleEditText;
+    private EditText taskStartTimeEditText;
+    private EditText taskEndTimeEditText;
+    private EditText taskDateEditText;
     private RadioGroup taskColorChooserContainer;
-    private Spinner repeatType;
-    private Spinner alertType;
-    private Spinner dayOfWeek;
-    private LinearLayout datePickerContainer;
-    private LinearLayout dayOfTheWeekPickerContainer;
+    private Spinner repeatTypeSpinner;
+    private Spinner alertTypeSpinner;
+    private Spinner dayOfWeekSpinner;
+    private LinearLayout datePickerContainerLinearLayout;
+    private LinearLayout dayOfTheWeekPickerContainerLinearLayout;
     private Button addTaskButton;
 
     private TaskViewModel taskViewModel;
@@ -96,19 +93,23 @@ public class CreateTaskFrament extends Fragment{
 
         task = new Task();
 
-        taskTitleDisplay = (TextView) view.findViewById(R.id.task_title_view);
-        taskTitle =(EditText) view.findViewById(R.id.task_title_editor);
-        taskStartTime = (EditText) view.findViewById(R.id.task_start_time);
-        taskEndTime = (EditText) view.findViewById(R.id.task_end_time);
-        taskDate = (EditText) view.findViewById(R.id.date_picker);
+        taskTitleDisplayTextView = (TextView) view.findViewById(R.id.task_title_view);
+        taskTitleEditText =(EditText) view.findViewById(R.id.task_title_editor);
+        taskStartTimeEditText = (EditText) view.findViewById(R.id.task_start_time);
+        taskEndTimeEditText = (EditText) view.findViewById(R.id.task_end_time);
+        taskDateEditText = (EditText) view.findViewById(R.id.date_picker);
         taskColorChooserContainer = (RadioGroup) view.findViewById(R.id.task_color_chooser_container);
-        repeatType =(Spinner) view.findViewById(R.id.repeat_mode_picker);
-        alertType = (Spinner) view.findViewById(R.id.alert_mode_picker);
-        dayOfWeek = (Spinner) view.findViewById(R.id.day_of_week_picker);
-        datePickerContainer = (LinearLayout)  view.findViewById(R.id.date_picker_container);
+        repeatTypeSpinner =(Spinner) view.findViewById(R.id.repeat_mode_picker);
+        alertTypeSpinner = (Spinner) view.findViewById(R.id.alert_mode_picker);
+        dayOfWeekSpinner = (Spinner) view.findViewById(R.id.day_of_week_picker);
+        datePickerContainerLinearLayout = (LinearLayout)  view.findViewById(R.id.date_picker_container);
         addTaskButton = (Button) view.findViewById(R.id.add_task_button);
-        dayOfTheWeekPickerContainer = (LinearLayout) view
+        dayOfTheWeekPickerContainerLinearLayout = (LinearLayout) view
                 .findViewById(R.id.day_of_the_week_picker_container);
+
+        setAppropriateInputFields();
+
+        //listeners
         addTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,10 +124,7 @@ public class CreateTaskFrament extends Fragment{
                 }
             }
         });
-
-        setAppropriateInputFields();
-
-        taskTitle.addTextChangedListener(new TextWatcher() {
+        taskTitleEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -135,7 +133,7 @@ public class CreateTaskFrament extends Fragment{
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 task.setTaskTitle(charSequence.toString());
-                taskTitleDisplay.setText(task.getTaskTitle());
+                taskTitleDisplayTextView.setText(task.getTaskTitle());
             }
 
             @Override
@@ -143,7 +141,7 @@ public class CreateTaskFrament extends Fragment{
 
             }
         });
-        taskStartTime.setOnClickListener(new View.OnClickListener() {
+        taskStartTimeEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Calendar mcurrentTime = Calendar.getInstance();
@@ -158,17 +156,17 @@ public class CreateTaskFrament extends Fragment{
                                 "0"+ new Integer(selectedHour).toString() : new Integer(selectedHour).toString();
                         String minutes = (selectedMinute<10) ?
                                 "0"+ new Integer(selectedMinute).toString(): new Integer(selectedMinute).toString();
-                        taskStartTime.setText(
+                        taskStartTimeEditText.setText(
                                 hour + ":" + minutes);
                         task.setTaskStartTime(LocalTime.of(selectedHour, selectedMinute));
+                        Log.d(TAG, "task Start Time has been Set to "+task.getTaskStartTime().toString());
                     }
                 }, hour, minute, true);//Yes 24 hour time
                 mTimePicker.setTitle("Select Time");
                 mTimePicker.show();
             }
         });
-
-        taskEndTime.setOnClickListener(new View.OnClickListener() {
+        taskEndTimeEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Calendar mcurrentTime = Calendar.getInstance();
@@ -183,17 +181,16 @@ public class CreateTaskFrament extends Fragment{
                                 "0"+ new Integer(selectedHour).toString() : new Integer(selectedHour).toString();
                         String minutes = (selectedMinute<10) ?
                                 "0"+ new Integer(selectedMinute).toString(): new Integer(selectedMinute).toString();
-                        taskEndTime.setText(
-                                hour + ":" + minutes);
+                        taskEndTimeEditText.setText(hour + ":" + minutes);
                         task.setTaskEndTime(LocalTime.of(selectedHour, selectedMinute));
+                        Log.d(TAG, "task endtime has been set to "+task.getTaskEndTime().toString());
                     }
                 }, hour, minute, true);//Yes 24 hour time
                 mTimePicker.setTitle("Select Time");
                 mTimePicker.show();
             }
         });
-
-        taskDate.setOnClickListener(new View.OnClickListener() {
+        taskDateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Calendar mcurrentDate = Calendar.getInstance();
@@ -206,7 +203,7 @@ public class CreateTaskFrament extends Fragment{
                     public void onDateSet(DatePicker datepicker, int selectedYear, int selectedMonth, int selectedDay) {
 
                         selectedMonth = selectedMonth + 1;
-                        taskDate.setText("" + selectedDay + "/" + selectedMonth + "/" + selectedYear);
+                        taskDateEditText.setText("" + selectedDay + "/" + selectedMonth + "/" + selectedYear);
                         task.setDate(LocalDate.of(selectedYear, selectedMonth, selectedDay));
                     }
                 }, mYear, mMonth, mDay);
@@ -215,7 +212,6 @@ public class CreateTaskFrament extends Fragment{
 
             }
         });
-
         taskColorChooserContainer.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -234,10 +230,9 @@ public class CreateTaskFrament extends Fragment{
                         getActivity(),
                         R.array.repeat_mode,
                         R.layout.support_simple_spinner_dropdown_item);
-        repeatType.setAdapter(repeatTypeAdapter);
-        Log.d("Create", "setting repeate type to "+task.getTaskRecurrence().getId());
-        repeatType.setSelection(task.getTaskRecurrence().getId());
-        repeatType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        repeatTypeSpinner.setAdapter(repeatTypeAdapter);
+        repeatTypeSpinner.setSelection(task.getTaskRecurrence().getId());
+        repeatTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 task.setTaskRecurrence(TaskRecurrence.getRecuranceById(position));
@@ -255,9 +250,9 @@ public class CreateTaskFrament extends Fragment{
                         getActivity(),
                         R.array.alert_mode,
                         R.layout.support_simple_spinner_dropdown_item);
-        alertType.setAdapter(alertTypeAdapter);
-        alertType.setSelection(task.getAlertType().getId());
-        alertType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        alertTypeSpinner.setAdapter(alertTypeAdapter);
+        alertTypeSpinner.setSelection(task.getAlertType().getId());
+        alertTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 task.setAlertType(AlertType.getAlertById(position));
@@ -275,8 +270,8 @@ public class CreateTaskFrament extends Fragment{
                         R.array.days_of_a_week,
                         R.layout.support_simple_spinner_dropdown_item
                         );
-        dayOfWeek.setAdapter(dayOfWeekPickerAdapter);
-        dayOfWeek.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        dayOfWeekSpinner.setAdapter(dayOfWeekPickerAdapter);
+        dayOfWeekSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                     task.setDayOfWeek(DayOfWeek.of(position+1));
@@ -295,12 +290,8 @@ public class CreateTaskFrament extends Fragment{
     private boolean addTask() {
         if (dataIsValid()){
             taskViewModel.insert(task);
-            Log.d("CreateTaskFragment", "data inserted successfully");
-
             return true;
-
         }
-
         return false;
     }
 
@@ -369,7 +360,7 @@ public class CreateTaskFrament extends Fragment{
         }
     }
 
-    void showInfoDialog(int titleStrinResource, int messageStringResource){
+    private void showInfoDialog(int titleStrinResource, int messageStringResource){
         new AlertDialog.Builder(getActivity())
                 .setTitle(titleStrinResource)
                 .setMessage(messageStringResource)
@@ -386,31 +377,27 @@ public class CreateTaskFrament extends Fragment{
         ((RadioButton) taskColorChooserContainer.getChildAt(task.getTaskColor().getColorId())).setChecked(true);
         switch (task.getTaskRecurrence()){
             case ONCE:
-
-                Log.d("CreateTask", "task is set to once");
-                if (dayOfTheWeekPickerContainer.getVisibility()==View.VISIBLE){
-                    dayOfTheWeekPickerContainer.setVisibility(View.INVISIBLE);
+                if (dayOfTheWeekPickerContainerLinearLayout.getVisibility()==View.VISIBLE){
+                    dayOfTheWeekPickerContainerLinearLayout.setVisibility(View.INVISIBLE);
                 }
-                if (datePickerContainer.getVisibility() == View.INVISIBLE){
-                    datePickerContainer.setVisibility(View.VISIBLE);
+                if (datePickerContainerLinearLayout.getVisibility() == View.INVISIBLE){
+                    datePickerContainerLinearLayout.setVisibility(View.VISIBLE);
                 }
                 break;
             case DAILY:
-                Log.d("CreateTask", "task is set to daily");
-                if (dayOfTheWeekPickerContainer.getVisibility()== View.VISIBLE){
-                    dayOfTheWeekPickerContainer.setVisibility(View.INVISIBLE);
+                if (dayOfTheWeekPickerContainerLinearLayout.getVisibility()== View.VISIBLE){
+                    dayOfTheWeekPickerContainerLinearLayout.setVisibility(View.INVISIBLE);
                 }
-                if (datePickerContainer.getVisibility() == View.VISIBLE){
-                    datePickerContainer.setVisibility(View.INVISIBLE);
+                if (datePickerContainerLinearLayout.getVisibility() == View.VISIBLE){
+                    datePickerContainerLinearLayout.setVisibility(View.INVISIBLE);
                 }
                 break;
             case ONLY_ON:
-                Log.d("CreateTask", "task is set only on");
-                if (datePickerContainer.getVisibility() == View.VISIBLE){
-                    datePickerContainer.setVisibility(View.INVISIBLE);
+                if (datePickerContainerLinearLayout.getVisibility() == View.VISIBLE){
+                    datePickerContainerLinearLayout.setVisibility(View.INVISIBLE);
                 }
-                if (dayOfTheWeekPickerContainer.getVisibility() == View.INVISIBLE){
-                    dayOfTheWeekPickerContainer.setVisibility(View.VISIBLE);
+                if (dayOfTheWeekPickerContainerLinearLayout.getVisibility() == View.INVISIBLE){
+                    dayOfTheWeekPickerContainerLinearLayout.setVisibility(View.VISIBLE);
                 }
                 break;
 
