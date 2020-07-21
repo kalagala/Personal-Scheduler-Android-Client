@@ -284,14 +284,17 @@
             </FrameLayout>
         </LinearLayout>
 
+
         <Button
-            android:id="@+id/add_task_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/add_task_button"
             android:layout_marginTop="4dp"
             android:background="@color/colorAccent"
-            android:text="@string/add_task"
-            android:textColor="#f1f1f1" />
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/add_task"/>
+
 
     </LinearLayout>
 </LinearLayout>

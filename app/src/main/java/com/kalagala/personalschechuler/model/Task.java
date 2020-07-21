@@ -40,6 +40,10 @@ public class Task {
     @ColumnInfo(name = "date")
     private LocalDate date;
 
+    private boolean taskStartTimeHasBeenEnteredByUser;
+    private boolean taskEndTimeHasBeenEnteredByUser;
+    private boolean taskDateHasBeenEnteredByUser;
+
     public Task(Task task){
         taskTitle = task.taskTitle;
         taskId = task.taskId;
@@ -50,6 +54,9 @@ public class Task {
         taskEndTime = task.taskEndTime;
         dayOfWeek = task.dayOfWeek;
         date = task.date;
+        taskDateHasBeenEnteredByUser = false;
+        taskEndTimeHasBeenEnteredByUser = false;
+        taskStartTimeHasBeenEnteredByUser = false;
 
     }
     public Task(){
@@ -62,7 +69,9 @@ public class Task {
         dayOfWeek = DayOfWeek.MONDAY;
         date = LocalDate.now();
         taskId = UUID.randomUUID();
-
+        taskDateHasBeenEnteredByUser = false;
+        taskEndTimeHasBeenEnteredByUser = false;
+        taskStartTimeHasBeenEnteredByUser = false;
     }
 
     @Override
@@ -163,5 +172,29 @@ public class Task {
 
     public void setTaskRecurrenceToRecuranceWithId(int position) {
         this.taskRecurrence = TaskRecurrence.getRecuranceById(position);
+    }
+
+    public boolean taskStartTimeHasBeenEnteredByUser() {
+        return taskStartTimeHasBeenEnteredByUser;
+    }
+
+    public void setTaskStartTimeHasBeenEnteredByUser(boolean taskStartTimeHasBeenEnteredByUser) {
+        this.taskStartTimeHasBeenEnteredByUser = taskStartTimeHasBeenEnteredByUser;
+    }
+
+    public boolean taskEndTimeHasBeenEnteredByUser() {
+        return taskEndTimeHasBeenEnteredByUser;
+    }
+
+    public void setTaskEndTimeHasBeenEnteredByUser(boolean taskEndTimeHasBeenEnteredByUser) {
+        this.taskEndTimeHasBeenEnteredByUser = taskEndTimeHasBeenEnteredByUser;
+    }
+
+    public boolean taskDateHasBeenEnteredByUser() {
+        return taskDateHasBeenEnteredByUser;
+    }
+
+    public void setTaskDateHasBeenEnteredByUser(boolean taskDateHasBeenEnteredByUser) {
+        this.taskDateHasBeenEnteredByUser = taskDateHasBeenEnteredByUser;
     }
 }

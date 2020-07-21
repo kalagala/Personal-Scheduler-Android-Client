@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -38,14 +39,15 @@ import com.kalagala.personalschechuler.model.AlertType;
 import com.kalagala.personalschechuler.model.TaskRecurrence;
 import com.kalagala.personalschechuler.model.Task;
 import com.kalagala.personalschechuler.model.TaskColor;
-import com.kalagala.personalschechuler.database.TaskRepository;
+import com.kalagala.personalschechuler.model.ValidationResponse;
+import com.kalagala.personalschechuler.utils.ValidationAsync;
+import com.kalagala.personalschechuler.utils.ValidationSync;
 import com.kalagala.personalschechuler.viewmodel.TaskViewModel;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Calendar;
-import java.util.List;
 
 public class CreateTaskFrament extends Fragment{
     public static final String FRAGMENT_PURPOSE="Fragment_Purpose";
@@ -159,6 +161,7 @@ public class CreateTaskFrament extends Fragment{
                         taskStartTimeEditText.setText(
                                 hour + ":" + minutes);
                         task.setTaskStartTime(LocalTime.of(selectedHour, selectedMinute));
+                        task.setTaskStartTimeHasBeenEnteredByUser(true);
                         Log.d(TAG, "task Start Time has been Set to "+task.getTaskStartTime().toString());
                     }
                 }, hour, minute, true);//Yes 24 hour time
@@ -183,6 +186,7 @@ public class CreateTaskFrament extends Fragment{
                                 "0"+ new Integer(selectedMinute).toString(): new Integer(selectedMinute).toString();
                         taskEndTimeEditText.setText(hour + ":" + minutes);
                         task.setTaskEndTime(LocalTime.of(selectedHour, selectedMinute));
+                        task.setTaskEndTimeHasBeenEnteredByUser(true);
                         Log.d(TAG, "task endtime has been set to "+task.getTaskEndTime().toString());
                     }
                 }, hour, minute, true);//Yes 24 hour time
@@ -205,6 +209,7 @@ public class CreateTaskFrament extends Fragment{
                         selectedMonth = selectedMonth + 1;
                         taskDateEditText.setText("" + selectedDay + "/" + selectedMonth + "/" + selectedYear);
                         task.setDate(LocalDate.of(selectedYear, selectedMonth, selectedDay));
+                        task.setTaskDateHasBeenEnteredByUser(true);
                     }
                 }, mYear, mMonth, mDay);
                 mDatePicker.setTitle("Select Date");
@@ -288,91 +293,109 @@ public class CreateTaskFrament extends Fragment{
     }
 
     private boolean addTask() {
-        if (dataIsValid()){
-            taskViewModel.insert(task);
-            return true;
+        ValidationSync validationSync = new ValidationSync(task);
+
+        Log.d(TAG, "Validating task title availability");
+        ValidationResponse taskTitleResponse =
+                new ValidationResponse(validationSync.checkTaskTitle());
+        if (!taskTitleResponse.isValid()){
+            showInfoDialog(
+                    taskTitleResponse.getDialogTitleResourceId(),
+                    taskTitleResponse.getDialogMessageResourceId()
+            );
+            return false;
         }
+
+        ValidationResponse taskStartTimeResponse =
+                new ValidationResponse(validationSync.checkTaskStartTime());
+        Log.d(TAG, "validating task start time availability");
+        if (!taskStartTimeResponse.isValid()){
+            showInfoDialog(
+                    taskStartTimeResponse.getDialogTitleResourceId(),
+                    taskStartTimeResponse.getDialogMessageResourceId()
+                    );
+            return false;
+        }
+
+        Log.d(TAG, "validating task end time availability");
+        ValidationResponse taskEndTimeResponse =
+                new ValidationResponse(validationSync.checkTaskEndTime());
+        if (!taskEndTimeResponse.isValid()){
+            showInfoDialog(
+                    taskEndTimeResponse.getDialogTitleResourceId(),
+                    taskEndTimeResponse.getDialogMessageResourceId()
+            );
+            return false;
+        }
+
+
+
+        if (task.getTaskRecurrence() == TaskRecurrence.ONCE){
+            Log.d(TAG, "Validating task date availability");
+            ValidationResponse taskDateValidationResponse =
+                    new ValidationResponse(validationSync.taskDateHasBeenEntered());
+            if (!taskDateValidationResponse.isValid()){
+                showInfoDialog(
+                        taskDateValidationResponse.getDialogTitleResourceId(),
+                        taskDateValidationResponse.getDialogMessageResourceId()
+                );
+                return false;
+            }
+        }
+
+//        if (dataIsAvailable()){
+//            taskViewModel.insert(task);
+//            return true;
+//        }
+        //TODO do async validation and show a loading button
+        Log.d(TAG, "Waiting for db validations");
+        addTaskButton.setText(R.string.processing);
         return false;
     }
 
-    private boolean dataIsValid() {
-        if(checkTaskTitle() && checKTaskStartTime() && checkTaskEndTime()&& checkAvailabilyOfTimeWindow()){
-            if (task.getTaskRecurrence() == TaskRecurrence.ONCE){
-                return checkTaskDate();
+    class asyncValidations extends AsyncTask<Task, Void, ValidationResponse> {
+        Fragment fragment;
+
+        asyncValidations(Fragment fragment){
+            this.fragment = fragment;
+        }
+
+        @Override
+        protected ValidationResponse doInBackground(Task... tasks) {
+            ValidationAsync validationAsync = new ValidationAsync(tasks[0], fragment);
+            if (validationAsync.checkTimeWindowAvailability()){
+
             }
-            return true;
-        }else {
-            return false;
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(ValidationResponse validationResponse) {
+            super.onPostExecute(validationResponse);
         }
     }
 
-    private boolean checkAvailabilyOfTimeWindow() {
-        List<Task> allTasks = (new TaskRepository(getActivity().getApplication()).getAllTasks()).getValue();
-//        for (Task taskFromDb: allTasks){
-//            switch (task.getTaskRecurrence()){
-//                case ONLY_ON:
-//                    //TODO figure out how to check time conflicts
-//            }
+//    private List<ValidationResponse> dataIsAvailable(ValidationSync validationSync) {
+//        List<ValidationResponse> validationResponses = new ArrayList<>();
+//
+//        if (validationSync.checkTaskTitle().isValid()){
+//            validationResponses.add(
+//                    new ValidationResponse(validationSync.checkTaskTitle().isValid())
+//            );
+//        }else {
+//            validationResponses.add(
+//                    new ValidationResponse(validationSync.checkTaskTitle())
+//            );
 //        }
-        return true;
-    }
-
-    private boolean checkTaskDate() {
-        if (task.getDate() == null){
-            showInfoDialog(R.string.empty_date, R.string.empty_date_message);
-            return false;
-        }else {
-            //TODO check if date is available
-
-        }
-        return true;
-    }
-
-    private boolean checkTaskEndTime() {
-        //TODO  check if time is available
-        if (task.getTaskEndTime() == null){
-            showInfoDialog(R.string.set_task_end_time, R.string.no_end_time_message);
-            return false;
-        }else if (task.getTaskEndTime().compareTo(task.getTaskStartTime()) == 0){
-            showInfoDialog(R.string.invalid_time, R.string.same_end_time_message);
-            return false;
-        }else if (task.getTaskEndTime().compareTo(task.getTaskStartTime()) < 0){
-            showInfoDialog(R.string.invalid_time, R.string.task_end_time_before_start);
-            return false;
-        }
-        return true;
-    }
-
-    private boolean checKTaskStartTime() {
-        if (task.getTaskStartTime() == null){
-            showInfoDialog(R.string.set_task_start_time, R.string.no_start_time_message);
-            return false;
-        }
-        return true;
-    }
-
-    private boolean checkTaskTitle() {
-        if (task.getTaskTitle().equals("") || task.getTaskTitle().equals("New Task")){
-            showInfoDialog(R.string.set_task_title, R.string.no_task_title_message);
-            return false;
-        }else {
-            return true;
-        }
-    }
-
-    private void showInfoDialog(int titleStrinResource, int messageStringResource){
-        new AlertDialog.Builder(getActivity())
-                .setTitle(titleStrinResource)
-                .setMessage(messageStringResource)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                })
-                .show();
-    }
-
+//        validationSync.checkTaskStartTime().isValid() && validationSync.checkTaskEndTime().isValid()){
+//            if (task.getTaskRecurrence() == TaskRecurrence.ONCE){
+//                validationSync.taskDateHasBeenEntered().isValid();
+//            }
+//            return true;
+//        }else {
+//            return false;
+//        }
+//    }
     private void setAppropriateInputFields() {
         ((RadioButton) taskColorChooserContainer.getChildAt(task.getTaskColor().getColorId())).setChecked(true);
         switch (task.getTaskRecurrence()){
@@ -402,5 +425,28 @@ public class CreateTaskFrament extends Fragment{
                 break;
 
         }
+    }
+    private void showInfoDialog(int titleStringResource, int messageStringResource){
+        new AlertDialog.Builder(getActivity())
+                .setTitle(titleStringResource)
+                .setMessage(messageStringResource)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .show();
+    }
+
+    private void showInfoDialogWithCustomString(int titleStringResource, int messageStringResource, String taskTitle) {
+        String msg = getActivity().getResources().getString(messageStringResource, taskTitle);
+        new AlertDialog.Builder(getActivity())
+                .setTitle(titleStringResource)
+                .setMessage(msg)
+                .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+
+                })
+                .show();
     }
 }
