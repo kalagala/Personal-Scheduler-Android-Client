@@ -22,8 +22,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.kalagala.personalschechuler.R;
 import com.kalagala.personalschechuler.activities.CreateTaskActivity;
 import com.kalagala.personalschechuler.model.Task;
+import com.kalagala.personalschechuler.model.TaskRecurrence;
 import com.kalagala.personalschechuler.viewmodel.TaskViewModel;
 
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,22 +34,56 @@ public class ShowTasksFragment extends Fragment {
     private TextView mNoTasksTextview;
     private TaskViewModel taskViewModel;
     private TaskAdapter taskAdapter;
+
+
+    public static final String DAY_OF_WEEK_ARG = "DAY_OF_WEEK";
+    public static final String TAG = "ShowTasksFragment";
+
+    private DayOfWeek dayOfWeek;
     private List<Task> mTasks = new ArrayList<>();
-    public static ShowTasksFragment newInstance(){
-        return new ShowTasksFragment();
+    public static ShowTasksFragment newInstance(int dayOfWeek){
+        dayOfWeek++;
+        ShowTasksFragment showTaskFragment = new ShowTasksFragment();
+        Bundle args = new Bundle();
+        Log.d(TAG,"creating a showTaskFragment with day of week position "+dayOfWeek);
+        args.getInt(DAY_OF_WEEK_ARG, dayOfWeek);
+        showTaskFragment.setArguments(args);
+        return showTaskFragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        dayOfWeek = DayOfWeek.of(args.getInt(DAY_OF_WEEK_ARG)+1);
         taskAdapter = new TaskAdapter(getActivity());
         taskViewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
         taskViewModel.getAllTasks().observe(this, new Observer<List<Task>>() {
             @Override
             public void onChanged(List<Task> tasks) {
                 Log.d("ShowTask", "found "+tasks.size()+" tasks from livedata");
-                taskAdapter.setTasks(tasks);
-                mTasks = tasks;
+                List<Task> thisDayTasks = new ArrayList<>();
+                for (Task task: tasks){
+                    switch (task.getTaskRecurrence()){
+                        case DAILY:
+                            thisDayTasks.add(task);
+                            break;
+                        case ONCE:
+                            if (task.getDate().getDayOfWeek().getValue()==dayOfWeek.getValue()){
+                                thisDayTasks.add(task);
+                            }
+                            break;
+                        case ONLY_ON:
+                            if (task.getDayOfWeek().getValue() == dayOfWeek.getValue()){
+                                thisDayTasks.add(task);
+                            }
+                    }
+
+                }
+
+
+                taskAdapter.setTasks(thisDayTasks);
+                mTasks = thisDayTasks;
             }
         });
     }
@@ -62,14 +98,7 @@ public class ShowTasksFragment extends Fragment {
          View view =inflater.inflate(R.layout.day_tasks_fragment, container, false);
          mRecyclerView =(RecyclerView) view.findViewById(R.id.tasks_container);
          mNoTasksTextview = (TextView) view.findViewById(R.id.not_task_text);
-            taskViewModel.getAllTasks().observe(this, new Observer<List<Task>>() {
-                @Override
-                public void onChanged(List<Task> tasks) {
-                    if (tasks.size()!=0){
-                        mNoTasksTextview.setVisibility(View.INVISIBLE);
-                    }
-                }
-            });
+
 
          mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
          mRecyclerView.setAdapter(taskAdapter);
@@ -78,7 +107,19 @@ public class ShowTasksFragment extends Fragment {
     }
 
 
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        taskViewModel.getAllTasks().observe(this, new Observer<List<Task>>() {
+            @Override
+            public void onChanged(List<Task> tasks) {
+                if (tasks.size()!=0){
+                    mNoTasksTextview.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+        Log.d(TAG, "on Start called");
+    }
 
     class TaskAdapter extends RecyclerView.Adapter<TaskHolder>{
         List<Task> mTasks;
@@ -95,6 +136,7 @@ public class ShowTasksFragment extends Fragment {
 
         void setTasks(List<Task> tasks){
             mTasks = tasks;
+            Log.d(TAG, "got "+tasks.size()+" to display for day "+dayOfWeek);
             notifyDataSetChanged();
         }
         @NonNull

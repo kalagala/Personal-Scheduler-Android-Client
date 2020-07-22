@@ -21,19 +21,22 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.kalagala.personalschechuler.R;
 
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.temporal.WeekFields;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class DayFragment extends Fragment {
+    private static final String TAG ="DayFragment";
     public static Fragment newInstance(){
         return new DayFragment();
     }
-    LinearLayout mDaysOfWeek;
+
     ViewPager2 tasksPager;
     TabLayout daysTab;
     DaysPagerAdapter daysPagerAdapter;
-    TextView mTodaysDate;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -46,35 +49,27 @@ public class DayFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mDaysOfWeek = (LinearLayout) view.findViewById(R.id.days_of_the_week);
-        mTodaysDate =(TextView) view.findViewById(R.id.today_date);
+        //mDaysOfWeek = (LinearLayout) view.findViewById(R.id.days_of_the_week);
+        //mTodaysDate =(TextView) view.findViewById(R.id.today_date);
         tasksPager = (ViewPager2) view.findViewById(R.id.tasks_pager);
-        daysTab = (TabLayout) view.findViewById(R.id.days_tab);
-        new TabLayoutMediator(daysTab, tasksPager,(tab, position)->{
-            String tabText = getDayAndDate(position);
-            tab.setText(tabText);
-            tasksPager.setCurrentItem(tab.getPosition(), true);
-        });
-        daysTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                tasksPager.setCurrentItem(tab.getPosition());
-                Log.d("TAB", "tab clicked "+tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
         daysPagerAdapter = new DaysPagerAdapter(this);
         tasksPager.setAdapter(daysPagerAdapter);
 
+        daysTab = (TabLayout) view.findViewById(R.id.days_tab);
+
+        new TabLayoutMediator(daysTab, tasksPager,
+                (tab, position)->{
+                    String tabText = getDayAndDate(position);
+                    tab.setText(tabText);
+                    tasksPager.setCurrentItem(tab.getPosition(), true);
+                }
+        ).attach();
+
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+        day--;
+        Log.d(TAG, "it is "+DayOfWeek.of(day)+" acording to calender");
+        tasksPager.setCurrentItem(day-1);
 
 //        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
 //        Date today = calendar.getTime();
@@ -128,17 +123,31 @@ public class DayFragment extends Fragment {
     }
 
     private String getDayAndDate(int forDayOfTheWeek) {
+        Log.d(TAG, "get day and date called with position "+forDayOfTheWeek);
+        final DayOfWeek firstDayOfWeek = WeekFields.of(Locale.getDefault()).getFirstDayOfWeek();
+        final DayOfWeek lastDayOfWeek = DayOfWeek.of(((firstDayOfWeek.getValue() + 5) % DayOfWeek.values().length) + 1);
+//        Log.d(TAG, "first day of Week is "+firstDayOfWeek);
+//        Log.d(TAG, "last Day of week is "+lastDayOfWeek);
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
-        Date today = calendar.getTime();
-        calendar.setTime(today);
+
+        Date todayDate = calendar.getTime();
+        Log.d(TAG, "\ntoday is "+todayDate);
+
+        calendar.setTime(todayDate);
         int thisDayOfTheWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        Date date = getThisDaysDate(thisDayOfTheWeek, forDayOfTheWeek, today);
+        thisDayOfTheWeek--;
+        Date date = getThisDaysDate(thisDayOfTheWeek, forDayOfTheWeek+1, todayDate);
+        Log.d(TAG, "todays day of the week is "+DayOfWeek.of(thisDayOfTheWeek-1));
+        Log.d(TAG, "date for day "+DayOfWeek.of(forDayOfTheWeek+1)+" is "+date+"\n");
         SimpleDateFormat formatter = new SimpleDateFormat("E, dd");
-        String formattedDate = formatter.format(today);
+        String formattedDate = formatter.format(date);
         return  formattedDate;
     }
 
     private Date getThisDaysDate(int currentDayOfWeek, int dayToGetDateOf, Date today) {
+
+        Log.d(TAG, "trying to get date for "+DayOfWeek.of(dayToGetDateOf));
+        Log.d(TAG, "today is "+DayOfWeek.of(currentDayOfWeek));
         if (currentDayOfWeek>dayToGetDateOf){
             for (int j = currentDayOfWeek; j>=dayToGetDateOf; j--){
                 if (j==dayToGetDateOf){
@@ -148,7 +157,7 @@ public class DayFragment extends Fragment {
         }else if(currentDayOfWeek<dayToGetDateOf){
             for (int j = currentDayOfWeek; j<=dayToGetDateOf; j++){
                 if (j==dayToGetDateOf){
-                    return new Date(today.getTime() + ((currentDayOfWeek-dayToGetDateOf)*24 * 3600000));
+                    return new Date(today.getTime() + ((dayToGetDateOf-currentDayOfWeek)*24 * 3600000));
                 }
             }
         }else{
@@ -166,7 +175,7 @@ public class DayFragment extends Fragment {
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-            return ShowTasksFragment.newInstance();
+            return ShowTasksFragment.newInstance(position);
         }
 
         @Override
