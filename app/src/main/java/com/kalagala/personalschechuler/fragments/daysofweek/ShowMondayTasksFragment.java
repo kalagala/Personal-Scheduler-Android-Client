@@ -1,4 +1,4 @@
-package com.kalagala.personalschechuler.fragments;
+package com.kalagala.personalschechuler.fragments.daysofweek;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,14 +22,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.kalagala.personalschechuler.R;
 import com.kalagala.personalschechuler.activities.CreateTaskActivity;
 import com.kalagala.personalschechuler.model.Task;
-import com.kalagala.personalschechuler.model.TaskRecurrence;
 import com.kalagala.personalschechuler.viewmodel.TaskViewModel;
 
+import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
-public class ShowTasksFragment extends Fragment {
+public class ShowMondayTasksFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private TextView mNoTasksTextview;
     private TaskViewModel taskViewModel;
@@ -37,27 +44,35 @@ public class ShowTasksFragment extends Fragment {
 
 
     public static final String DAY_OF_WEEK_ARG = "DAY_OF_WEEK";
+    public static final String DATE = "DATE";
     public static final String TAG = "ShowTasksFragment";
 
     private DayOfWeek dayOfWeek;
     private List<Task> mTasks = new ArrayList<>();
-    public static ShowTasksFragment newInstance(int dayOfWeek){
-        dayOfWeek++;
-        ShowTasksFragment showTaskFragment = new ShowTasksFragment();
+    public static ShowMondayTasksFragment newInstance(int dayOfWeek, Date date){
+        ShowMondayTasksFragment mondayTasksFragment =  new ShowMondayTasksFragment();
         Bundle args = new Bundle();
-        Log.d(TAG,"creating a showTaskFragment with day of week position "+dayOfWeek);
-        args.getInt(DAY_OF_WEEK_ARG, dayOfWeek);
-        showTaskFragment.setArguments(args);
-        return showTaskFragment;
+        args.putString(DATE, date.toString());
+        mondayTasksFragment.setArguments(args);
+        return mondayTasksFragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        Date todayDate = calendar.getTime();
+        dayOfWeek = DayOfWeek.MONDAY;
+        calendar.setTime(todayDate);
+        int thisDayOfTheWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        thisDayOfTheWeek--;
+        Date thisDaysDate = getThisDaysDate(thisDayOfTheWeek, dayOfWeek.getValue(), todayDate);
+        LocalDate finalDate  = thisDaysDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+
         super.onCreate(savedInstanceState);
-        Bundle args = getArguments();
-        dayOfWeek = DayOfWeek.of(args.getInt(DAY_OF_WEEK_ARG)+1);
         taskAdapter = new TaskAdapter(getActivity());
         taskViewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
+
         taskViewModel.getAllTasks().observe(this, new Observer<List<Task>>() {
             @Override
             public void onChanged(List<Task> tasks) {
@@ -69,7 +84,7 @@ public class ShowTasksFragment extends Fragment {
                             thisDayTasks.add(task);
                             break;
                         case ONCE:
-                            if (task.getDate().getDayOfWeek().getValue()==dayOfWeek.getValue()){
+                            if (task.getDate().getDayOfWeek().getValue()==dayOfWeek.getValue() && finalDate.compareTo(task.getDate())==0 ){
                                 thisDayTasks.add(task);
                             }
                             break;
@@ -149,13 +164,13 @@ public class ShowTasksFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull TaskHolder holder, int position) {
-            holder.bindTask(ShowTasksFragment.this.mTasks.get(position));
+            holder.bindTask(ShowMondayTasksFragment.this.mTasks.get(position));
         }
 
         @Override
         public int getItemCount() {
             if (mTasks != null){
-                return ShowTasksFragment.this.mTasks.size();
+                return ShowMondayTasksFragment.this.mTasks.size();
             }else {
                 return 0;
             }
@@ -238,4 +253,27 @@ public class ShowTasksFragment extends Fragment {
             return null;
         }
     }
+    private Date getThisDaysDate(int currentDayOfWeek, int dayToGetDateOf, Date today) {
+
+        Log.d(TAG, "trying to get date for "+DayOfWeek.of(dayToGetDateOf));
+        Log.d(TAG, "today is "+DayOfWeek.of(currentDayOfWeek));
+        if (currentDayOfWeek>dayToGetDateOf){
+            for (int j = currentDayOfWeek; j>=dayToGetDateOf; j--){
+                if (j==dayToGetDateOf){
+                    return new Date(today.getTime() - ((currentDayOfWeek-dayToGetDateOf)*24 * 3600000));
+                }
+            }
+        }else if(currentDayOfWeek<dayToGetDateOf){
+            for (int j = currentDayOfWeek; j<=dayToGetDateOf; j++){
+                if (j==dayToGetDateOf){
+                    return new Date(today.getTime() + ((dayToGetDateOf-currentDayOfWeek)*24 * 3600000));
+                }
+            }
+        }else{
+            Log.d("DayFragment",currentDayOfWeek+"  "+dayToGetDateOf);
+            return today;
+        }
+        return null;
+    }
+
 }

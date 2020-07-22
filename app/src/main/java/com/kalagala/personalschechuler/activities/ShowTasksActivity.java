@@ -11,7 +11,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kalagala.personalschechuler.R;
-import com.kalagala.personalschechuler.fragments.DayFragment;
+import com.kalagala.personalschechuler.fragments.DayTaskFragment;
 
 public class ShowTasksActivity extends AppCompatActivity {
     FloatingActionButton createTaskButton;
@@ -34,7 +34,7 @@ public class ShowTasksActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.frament_container_home);
         if (fragment == null){
-            fragment = DayFragment.newInstance();
+            fragment = DayTaskFragment.newInstance();
             fm.beginTransaction()
                     .add(R.id.frament_container_home, fragment)
                     .commit();
