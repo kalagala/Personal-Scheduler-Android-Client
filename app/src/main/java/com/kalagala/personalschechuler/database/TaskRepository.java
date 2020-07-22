@@ -21,7 +21,9 @@ public class TaskRepository {
         AppPersistentData db = AppPersistentData.getDatabase(application);
         taskDao = db.taskDao();
         allTasks = taskDao.getAllTasks();
+        
     }
+
 
     public LiveData<List<Task>> getAllTasks() {
         if (allTasks.getValue() != null){
@@ -32,6 +34,7 @@ public class TaskRepository {
 
         return allTasks;
     }
+
 
     public void insert(Task task){
 

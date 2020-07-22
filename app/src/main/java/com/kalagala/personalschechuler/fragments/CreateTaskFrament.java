@@ -1,9 +1,9 @@
 package com.kalagala.personalschechuler.fragments;
 
+import android.app.Application;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,8 +34,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.kalagala.personalschechuler.R;
-import com.kalagala.personalschechuler.activities.ShowTasksActivity;
+import com.kalagala.personalschechuler.database.AppPersistentData;
 import com.kalagala.personalschechuler.model.AlertType;
+import com.kalagala.personalschechuler.model.TaskDao;
 import com.kalagala.personalschechuler.model.TaskRecurrence;
 import com.kalagala.personalschechuler.model.Task;
 import com.kalagala.personalschechuler.model.TaskColor;
@@ -48,6 +49,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Calendar;
+import java.util.List;
 
 public class CreateTaskFrament extends Fragment{
     public static final String FRAGMENT_PURPOSE="Fragment_Purpose";
@@ -115,17 +117,25 @@ public class CreateTaskFrament extends Fragment{
         addTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(addTask()){
-                    Intent intent = new Intent(getActivity(), ShowTasksActivity.class);
-                    startActivity(intent);
-
-                    Toast toast = Toast.makeText(getActivity()
-                            , R.string.task_create_successfully, Toast.LENGTH_SHORT);
-                    toast.show();
-                    getActivity().finish();
+                if (validateAvailabilityOfAllInputFields()){
+                    //TODO do async validation and show a loading button
+                    Log.d(TAG, "Waiting for db validations");
+                    addTaskButton.setText(R.string.processing);
+                    addTaskButton.setEnabled(false);
+                    new GetDbTasks(getActivity().getApplication()).execute();
                 }
+//                if(addTask()){
+//                    Intent intent = new Intent(getActivity(), ShowTasksActivity.class);
+//                    startActivity(intent);
+//
+//                    Toast toast = Toast.makeText(getActivity()
+//                            , R.string.task_create_successfully, Toast.LENGTH_SHORT);
+//                    toast.show();
+//                    getActivity().finish();
+//                }
             }
         });
+
         taskTitleEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -292,7 +302,8 @@ public class CreateTaskFrament extends Fragment{
 
     }
 
-    private boolean addTask() {
+
+    private boolean validateAvailabilityOfAllInputFields() {
         ValidationSync validationSync = new ValidationSync(task);
 
         Log.d(TAG, "Validating task title availability");
@@ -347,33 +358,79 @@ public class CreateTaskFrament extends Fragment{
 //            taskViewModel.insert(task);
 //            return true;
 //        }
-        //TODO do async validation and show a loading button
-        Log.d(TAG, "Waiting for db validations");
-        addTaskButton.setText(R.string.processing);
-        return false;
+        return true;
+
+
+
+    }
+    private void OnTaskFromDbLoaded(List<Task> tasksFromDb){
+        Log.d(TAG, "found "+tasksFromDb.size()+" tasks from db further processing needed");
+        ValidationAsync validationAsync = new ValidationAsync(task);
+
+        ValidationResponse validationResponse = validationAsync.validate(tasksFromDb);
+
+        if (validationResponse.isValid()){
+            Log.d(TAG, "task has been verified against tasks from db and is now getting inserted to db");
+            taskViewModel.insert(task);
+            Toast toast = Toast.makeText(getActivity()
+                            , R.string.task_create_successfully, Toast.LENGTH_SHORT);
+                    toast.show();
+                    getActivity().finish();
+        }else {
+            showInfoDialogWithCustomString(
+                    validationResponse.getDialogTitleResourceId(),
+                    validationResponse.getDialogMessageResourceId(),
+                    validationResponse.getStringForPlaceHolder()
+            );
+            addTaskButton.setText(R.string.add_task);
+            addTaskButton.setEnabled(true);
+        }
     }
 
-    class asyncValidations extends AsyncTask<Task, Void, ValidationResponse> {
-        Fragment fragment;
+    private class GetDbTasks extends AsyncTask<Void, Void, List<Task>>{
 
-        asyncValidations(Fragment fragment){
-            this.fragment = fragment;
+        TaskDao taskDao;
+        GetDbTasks(Application application){
+            AppPersistentData db = AppPersistentData.getDatabase(application);
+            taskDao = db.taskDao();
+        }
+        @Override
+        protected List<Task> doInBackground(Void... voids) {
+            return taskDao.getAllTasksSync();
         }
 
         @Override
-        protected ValidationResponse doInBackground(Task... tasks) {
-            ValidationAsync validationAsync = new ValidationAsync(tasks[0], fragment);
-            if (validationAsync.checkTimeWindowAvailability()){
-
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(ValidationResponse validationResponse) {
-            super.onPostExecute(validationResponse);
+        protected void onPostExecute(List<Task> tasks) {
+            super.onPostExecute(tasks);
+            OnTaskFromDbLoaded(tasks);
         }
     }
+
+//    class getAllTasks extends AsyncTask<Void, Void, List<Task>> {
+//        Fragment fragment;
+//
+//        getAllTasks(Fragment fragment){
+//            this.fragment = fragment;
+//        }
+//
+//        @Override
+//        protected List<Task> doInBackground(Void... voids) {
+//            return null;
+//        }
+
+
+//        @Override
+//        protected ValidationResponse doInBackground(Task... tasks) {
+//            ValidationAsync validationAsync = new ValidationAsync(tasks[0], fragment);
+//            validationAsync.validate(new ArrayList<>());
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(ValidationResponse validationResponse) {
+//            super.onPostExecute(validationResponse);
+//        }
+    //}
 
 //    private List<ValidationResponse> dataIsAvailable(ValidationSync validationSync) {
 //        List<ValidationResponse> validationResponses = new ArrayList<>();

@@ -5,19 +5,18 @@ public class ValidationResponse {
     private int dialogTitleResourceId;
     private int dialogMessageResourceId;
     private boolean hasStringParameterVariable;
-    private int stringParameterResourceId;
+    private String stringForPlaceHolder;
 
     public ValidationResponse(
             boolean isValid,
             int dialogTitleResourceId,
             int dialogMessageResourceId,
-            boolean hasStringParameterVariable,
-            int stringParameterResourceId) {
+            String stringForPlaceHolder) {
         this.isValid = isValid;
         this.dialogTitleResourceId = dialogTitleResourceId;
         this.dialogMessageResourceId = dialogMessageResourceId;
-        this.hasStringParameterVariable = hasStringParameterVariable;
-        this.stringParameterResourceId = stringParameterResourceId;
+        this.hasStringParameterVariable = true;
+        this.stringForPlaceHolder = stringForPlaceHolder;
     }
 
     public ValidationResponse(boolean isValid){
@@ -25,7 +24,7 @@ public class ValidationResponse {
         this.dialogMessageResourceId = 0;
         this.dialogMessageResourceId = 0;
         this.hasStringParameterVariable = false;
-        this.stringParameterResourceId = 0;
+        this.stringForPlaceHolder = null;
 
     }
 
@@ -36,7 +35,7 @@ public class ValidationResponse {
         this.dialogTitleResourceId = dialogTitleResourceId;
         this.dialogMessageResourceId = dialogMessageResourceId;
         this.hasStringParameterVariable = false;
-        this.stringParameterResourceId = 0;
+        this.stringForPlaceHolder = null;
     }
 
     public ValidationResponse(ValidationResponse validationResponse) {
@@ -44,7 +43,7 @@ public class ValidationResponse {
         this.dialogTitleResourceId = validationResponse.dialogTitleResourceId;
         this.dialogMessageResourceId = validationResponse.dialogMessageResourceId;
         this.hasStringParameterVariable = validationResponse.hasStringParameterVariable;
-        this.stringParameterResourceId = validationResponse.stringParameterResourceId;
+        this.stringForPlaceHolder = validationResponse.stringForPlaceHolder;
     }
 
     public boolean isValid() {
@@ -79,11 +78,11 @@ public class ValidationResponse {
         this.hasStringParameterVariable = hasStringParameterVariable;
     }
 
-    public int getStringParameterResourceId() {
-        return stringParameterResourceId;
+    public String getStringForPlaceHolder() {
+        return stringForPlaceHolder;
     }
 
-    public void setStringParameterResourceId(int stringParameterResourceId) {
-        this.stringParameterResourceId = stringParameterResourceId;
+    public void setStringForPlaceHolder(String stringForPlaceHolder) {
+        this.stringForPlaceHolder = stringForPlaceHolder;
     }
 }

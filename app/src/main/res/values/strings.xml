@@ -62,15 +62,15 @@
     <string name="task_end_time_can_not_be_same">Invalid end time</string>
     <string name="same_end_time_message">Task end time can not be the same as task start time</string>
     <string name="invalid_time">Invalid Time</string>
-    <string name="task_end_time_before_start">Task endtime can not be before start time</string>
+    <string name="task_end_time_before_start">Task end time can not be before start time</string>
     <string name="empty_date">Please specify date</string>
     <string name="empty_date_message">Tasks occuring once needs a specific date</string>
     <string name="task_create_successfully">Task Created successfully</string>
     <string name="start_time_not_available">Start Time not Available</string>
-    <string name="task_available_at_specified_time">A task with title \"%s\" already exist with the start time you\'ve specified</string>
+    <string name="task_available_at_specified_time">A task with title %s already exist in the time frame you\'ve specified</string>
     <string name="task_end_time_not_available">Task End time not available</string>
-    <string name="task_end_time_available_at_specified_time">"the end time you specified is conflicting with time frame of task with title \"%s%\" "</string>
+    <string name="task_end_time_available_at_specified_time">the end time you specified is conflicting with time frame of task with title %s%</string>
     <string name="invalid_date">Invalid Date</string>
-    <string name="date_in_the_past">"The Date you entered for the task is in the past "</string>
+    <string name="date_in_the_past">The Date you entered for the task is in the past </string>
     <string name="processing">Processing...</string>
 </resources>

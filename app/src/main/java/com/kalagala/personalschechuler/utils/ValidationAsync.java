@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer;
 import com.kalagala.personalschechuler.R;
 import com.kalagala.personalschechuler.database.TaskRepository;
 import com.kalagala.personalschechuler.model.Task;
+import com.kalagala.personalschechuler.model.ValidationResponse;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -19,98 +20,109 @@ import java.util.List;
 public class ValidationAsync {
     private static final String TAG = "Validation";
     Task newTask;
-    Fragment fragment;
-    public ValidationAsync(Task newTask, Fragment fragment){
+    public ValidationAsync(Task newTask){
         this.newTask = newTask;
-        this.fragment= fragment;
     }
-    public boolean checkTimeWindowAvailability() {
-        Log.d(TAG,"checking time Window availability");
-        (new TaskRepository(
-                fragment
-                        .getActivity()
-                        .getApplication())
-                .getAllTasks())
-                .observe(
-                        fragment.getActivity(),
-                        new Observer<List<Task>>() {
-            @Override
-            public void onChanged(List<Task> tasks) {
-                validate(tasks);
-            }
-        });
-
-        return true;
-    }
-
-    boolean validate(List<Task> allTasks){
-        Log.d(TAG, "Found "+allTasks.size()+" existing tasks");
-        for (Task taskFromDb: allTasks){
-            Log.d(TAG, "Checking Conflict With task "+taskFromDb);
+    public ValidationResponse validate(List<Task> allTasksFromDb){
+        Log.d(TAG, "validation Started");
+        Log.d(TAG, "Found "+allTasksFromDb.size()+" existing tasks");
+        int iteration =0;
+        ValidationResponse validationResponse;
+        for (Task taskFromDb: allTasksFromDb){
+            Log.d(TAG, "iteration "+iteration);
+            iteration++;
+            Log.d(TAG, "Checking if \n"+newTask+"\n has Conflict With taskfrom db \n"+taskFromDb);
             switch (newTask.getTaskRecurrence()){
-                case ONLY_ON: return onlyOnTaskHasNoConflictWithExistingTask(taskFromDb);
-                case ONCE: return onceOccurringTaskHasNoConflictWithExisting(taskFromDb);
-                case DAILY:return dailyOccurringTaskHasNoConflictWithExistingTask(taskFromDb);
+                case ONLY_ON:
+                    Log.d(TAG, "validating an only on task against tasks from db");
+                    if(!onlyOnTaskHasNoConflictWithExistingTask(taskFromDb).isValid()){
+                        return onlyOnTaskHasNoConflictWithExistingTask(taskFromDb);
+                    }
+                    break;
+                case ONCE:
+                    Log.d(TAG, "validating a once task against tasks from db");
+                    if(!onceOccurringTaskHasNoConflictWithExisting(taskFromDb).isValid()){
+                        return onceOccurringTaskHasNoConflictWithExisting(taskFromDb);
+                    }
+                    break;
 
-                //TODO figure out how to check time conflicts
+                case DAILY:
+                    Log.d(TAG, "validating a daily task against tasks from db");
+                    if(!dailyOccurringTaskHasNoConflictWithExistingTask(taskFromDb).isValid()){
+                        return dailyOccurringTaskHasNoConflictWithExistingTask(taskFromDb);
+                    }
+                    break;
+
             }
         }
 
-        return true;
+        return new ValidationResponse(true);
 
     }
-    private boolean dailyOccurringTaskHasNoConflictWithExistingTask(Task taskFromDb) {
+    private ValidationResponse dailyOccurringTaskHasNoConflictWithExistingTask(Task taskFromDb) {
         switch (taskFromDb.getTaskRecurrence()){
-            case DAILY: return dailyOccurringTaskHasNoConflictWithExistingDailyTask(taskFromDb);
-            case ONLY_ON: return dailyOccurringTaskHasNoConflictWithExistingOnlyOnTask(taskFromDb);
-            case ONCE: return dailyOccurringTaskHasNoConflictWithExistingOnceTask(taskFromDb);
+            case DAILY:
+                Log.d(TAG, "checking weather a daily occurring task  has querals with daily task from db");
+                return dailyOccurringTaskHasNoConflictWithExistingDailyTask(taskFromDb);
+            case ONLY_ON:
+                Log.d(TAG, "checking weather a daily occurring task  has querals with only on task from db");
+                return dailyOccurringTaskHasNoConflictWithExistingOnlyOnTask(taskFromDb);
+            case ONCE:
+                Log.d(TAG, "checking weather a daily occurring task  has querals with once task from db");
+                return dailyOccurringTaskHasNoConflictWithExistingOnceTask(taskFromDb);
 
         }
-        return true;
+        return new ValidationResponse(true);
     }
 
-    private boolean dailyOccurringTaskHasNoConflictWithExistingOnceTask(Task taskFromDb) {
+    private ValidationResponse dailyOccurringTaskHasNoConflictWithExistingOnceTask(Task taskFromDb) {
         return hasNoTimeConflict(taskFromDb);
     }
 
-    private boolean dailyOccurringTaskHasNoConflictWithExistingOnlyOnTask(Task taskFromDb) {
+    private ValidationResponse dailyOccurringTaskHasNoConflictWithExistingOnlyOnTask(Task taskFromDb) {
         return hasNoTimeConflict(taskFromDb);
     }
 
 
-    private boolean dailyOccurringTaskHasNoConflictWithExistingDailyTask(Task taskFromDb) {
+    private ValidationResponse dailyOccurringTaskHasNoConflictWithExistingDailyTask(Task taskFromDb) {
         return hasNoTimeConflict(taskFromDb);
     }
 
-    private boolean onceOccurringTaskHasNoConflictWithExisting(Task taskFromDb) {
+    private ValidationResponse onceOccurringTaskHasNoConflictWithExisting(Task taskFromDb) {
         switch (taskFromDb.getTaskRecurrence()){
-            case ONCE: return onceOccurringTaskHasNoConflictWithExistingOnceTask(taskFromDb);
-            case DAILY: return onceOccurringTaskHasNoConflictWithExistingDailyTask(taskFromDb);
-            case ONLY_ON: return onceOccurringTaskHasNoConflictWithExistingOnlyOnTask(taskFromDb);
+            case ONCE:
+                Log.d(TAG, "checking weather once occurring task  has querals with once task from db");
+                return onceOccurringTaskHasNoConflictWithExistingOnceTask(taskFromDb);
+            case DAILY:
+                Log.d(TAG, "checking weather once occurring task  has querals with daily task from db");
+                return onceOccurringTaskHasNoConflictWithExistingDailyTask(taskFromDb);
+            case ONLY_ON:
+                Log.d(TAG, "checking weather once occurring task  has querals with only on task from db");
+                return onceOccurringTaskHasNoConflictWithExistingOnlyOnTask(taskFromDb);
         }
-        return true;
+        return new ValidationResponse(true);
     }
 
-    private boolean onceOccurringTaskHasNoConflictWithExistingOnlyOnTask(Task taskFromDb) {
-        if (newTask.getDate().getDayOfWeek().equals(taskFromDb.getDayOfWeek())){
+    private ValidationResponse onceOccurringTaskHasNoConflictWithExistingOnlyOnTask(Task taskFromDb) {
+        if (newTask.getDate().getDayOfWeek().getValue()==taskFromDb.getDayOfWeek().getValue()){
             return hasNoTimeConflict(taskFromDb);
         }
-        return true;
+        return new ValidationResponse(true);
     }
 
-    private boolean onceOccurringTaskHasNoConflictWithExistingDailyTask(Task taskFromDb) {
+    private ValidationResponse onceOccurringTaskHasNoConflictWithExistingDailyTask(Task taskFromDb) {
         return hasNoTimeConflict(taskFromDb);
     }
 
-    private boolean onceOccurringTaskHasNoConflictWithExistingOnceTask(Task taskFromDb) {
+    private ValidationResponse onceOccurringTaskHasNoConflictWithExistingOnceTask(Task taskFromDb) {
         if (newTask.getDate().compareTo(taskFromDb.getDate()) == 0){
             return hasNoTimeConflict(taskFromDb);
         }
-        return true;
+        return new ValidationResponse(true);
     }
 
 
-    private boolean hasNoTimeConflict(Task taskFromDb) {
+    private ValidationResponse hasNoTimeConflict(Task taskFromDb) {
         if (newTaskTimeIsBetweenExistingTaskTime(
                 newTask.getTaskStartTime(),
                 taskFromDb.getTaskStartTime(),
@@ -121,7 +133,14 @@ public class ValidationAsync {
 //                    R.string.task_available_at_specified_time,
 //                    taskFromDb.getTaskTitle()
 //            );
-            return false;
+            return new ValidationResponse(
+                    false,
+                    R.string.start_time_not_available,
+                    R.string.task_available_at_specified_time,
+                    taskFromDb.getTaskTitle()
+
+
+            );
         } else if (
                 newTaskTimeIsBetweenExistingTaskTime(
                         newTask.getTaskEndTime(),
@@ -133,28 +152,37 @@ public class ValidationAsync {
 //                    R.string.task_end_time_available_at_specified_time,
 //                    taskFromDb.getTaskTitle()
 //            );
-            return false;
+            return new ValidationResponse(
+                    false,
+                    R.string.task_end_time_not_available,
+                    R.string.task_end_time_available_at_specified_time,
+                    taskFromDb.getTaskTitle()
+            );
         }
-        return true;
+        return new ValidationResponse(true);
     }
-    private boolean onlyOnTaskHasNoConflictWithExistingTask(Task taskFromDb){
+    private ValidationResponse onlyOnTaskHasNoConflictWithExistingTask(Task taskFromDb){
         switch (taskFromDb.getTaskRecurrence()){
             case ONLY_ON:
-                if (newTask.getDayOfWeek().equals(taskFromDb.getDayOfWeek())){
+                Log.d(TAG, "checking wheather an only has querals with only on task from db");
+                if (newTask.getDayOfWeek().getValue()==taskFromDb.getDayOfWeek().getValue()){
                     return hasNoTimeConflict(taskFromDb);
                 }
+                return new ValidationResponse(true);
             case DAILY:
+                Log.d(TAG, "checking wheather an only on task has querals with daily task from db");
                 return hasNoTimeConflict(taskFromDb);
             case ONCE:
+                Log.d(TAG, "checking wheather an only on task has querals with once occuring task from db");
                 return onlyOnTaskHasNoConflictWithExistingOnceTask(taskFromDb);
         }
-        return true;
+        return new ValidationResponse(true);
     }
-    private boolean onlyOnTaskHasNoConflictWithExistingOnceTask(Task taskFromDb) {
+    private ValidationResponse onlyOnTaskHasNoConflictWithExistingOnceTask(Task taskFromDb) {
         if (newTask.getDayOfWeek().equals(taskFromDb.getDate().getDayOfWeek())){
             return hasNoTimeConflict(taskFromDb);
         }
-        return true;
+        return new ValidationResponse(true);
     }
     private boolean newTaskTimeIsBetweenExistingTaskTime(LocalTime newTasktime, LocalTime existingTaskStartTime, LocalTime existingTaskEndTime){
         return ((newTasktime.isAfter(existingTaskStartTime))&&(newTasktime.isBefore(existingTaskEndTime)));
