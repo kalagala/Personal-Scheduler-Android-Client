@@ -40,6 +40,31 @@ public class TaskRepository {
 
        new insertAsyncTask(taskDao).execute(task);
     }
+
+    public Task getTask(String taskUUIDString) {
+        return taskDao.getTask(taskUUIDString);
+    }
+
+    public void updateTask(Task task) {
+    }
+
+    public void deleteTask(Task task) {
+        new deleteAsyncTask(taskDao).execute(task);
+    }
+
+    private static class deleteAsyncTask extends AsyncTask<Task, Void, Void> {
+        private TaskDao taskDao;
+
+        deleteAsyncTask(TaskDao taskDao){
+            this.taskDao = taskDao;
+        }
+
+        @Override
+        protected Void doInBackground(Task... tasks) {
+            taskDao.deleteTask(tasks[0]);
+            return null;
+        }
+    }
     private static class insertAsyncTask extends AsyncTask<Task, Void, Void> {
         private TaskDao taskDao;
 
@@ -50,6 +75,21 @@ public class TaskRepository {
         @Override
         protected Void doInBackground(Task... tasks) {
             taskDao.insertTask(tasks[0]);
+            return null;
+        }
+    }
+
+
+    private static class updateAsyncTask extends AsyncTask<Task, Void, Void> {
+        private TaskDao taskDao;
+
+        updateAsyncTask(TaskDao taskDao){
+            this.taskDao = taskDao;
+        }
+
+        @Override
+        protected Void doInBackground(Task... tasks) {
+            taskDao.updateTask(tasks[0]);
             return null;
         }
     }

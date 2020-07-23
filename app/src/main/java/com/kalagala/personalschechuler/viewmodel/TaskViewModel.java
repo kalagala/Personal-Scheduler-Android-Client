@@ -30,4 +30,16 @@ public class TaskViewModel extends AndroidViewModel {
         Log.d(TAG, "about to insert a task to db "+task);
         repository.insert(task);
     }
+
+    public Task getTask(String taskUUIDString) {
+        return repository.getTask(taskUUIDString);
+    }
+
+    public void update(Task task) {
+        repository.updateTask(task);
+    }
+
+    public void delete(Task task) {
+        repository.deleteTask(task);
+    }
 }

@@ -10,7 +10,7 @@ import androidx.room.TypeConverters;
 import com.kalagala.personalschechuler.model.Task;
 import com.kalagala.personalschechuler.model.TaskDao;
 
-@Database(entities = {Task.class}, version=4)
+@Database(entities = {Task.class}, version=5)
 @TypeConverters({AppTypeConvertors.class})
 public abstract class AppPersistentData extends RoomDatabase {
     private static AppPersistentData INSTANCE;

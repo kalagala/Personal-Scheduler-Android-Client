@@ -245,7 +245,8 @@
                         style="@style/level_2_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="1.7"
+                        android:ems="5"
                         android:text="@string/repeat" />
 
                     <Spinner
@@ -272,7 +273,8 @@
                         style="@style/level_2_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="1.7"
+                        android:ems="5"
                         android:text="@string/alert" />
 
                     <Spinner

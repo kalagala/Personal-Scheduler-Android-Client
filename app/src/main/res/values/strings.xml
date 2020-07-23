@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Personal Schechuler</string>
+    <string name="app_name">Personal Scheduler</string>
     <string name="enter_phone_number">Enter Phone Number to Continue</string>
     <string name="phone_sample">+255xxxxxxxxx</string>
     <string name="next">next</string>
@@ -73,4 +73,9 @@
     <string name="invalid_date">Invalid Date</string>
     <string name="date_in_the_past">The Date you entered for the task is in the past </string>
     <string name="processing">Processing...</string>
+    <string name="task_updated_successfully">Task Updated Successfully</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="delete_title">Delete Task</string>
+    <string name="delete_task_message">Are you sure you want to delete this task?, \nthis action is irrevesible</string>
+    <string name="task_deleted_successfully">Task Deleted Successfully</string>
 </resources>

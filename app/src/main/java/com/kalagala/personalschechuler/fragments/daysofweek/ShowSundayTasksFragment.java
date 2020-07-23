@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.kalagala.personalschechuler.R;
 import com.kalagala.personalschechuler.activities.CreateTaskActivity;
+import com.kalagala.personalschechuler.activities.EditTaskActivity;
 import com.kalagala.personalschechuler.model.Task;
 import com.kalagala.personalschechuler.viewmodel.TaskViewModel;
 
@@ -182,15 +183,16 @@ public class ShowSundayTasksFragment extends Fragment {
         TextView taskStartTime;
         TextView taskEndTime;
         ImageView alertTypeIcon;
+        Task task;
         TextView recuranceTypeDisplayer;
         public TaskHolder(@NonNull View itemView) {
             super(itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(getActivity(), CreateTaskActivity.class);
+                    Intent intent = new Intent(getActivity(), EditTaskActivity.class);
                     Bundle args = new Bundle();
-                    args.putInt(CreateTaskActivity.ACTIVITY_PURPOSE, CreateTaskActivity.ARG_EDIT_TASK);
+                    args.putString(EditTaskActivity.UUIDString, task.getTaskId().toString());
                     intent.putExtras(args);
                     startActivity(intent);
                 }
@@ -206,6 +208,7 @@ public class ShowSundayTasksFragment extends Fragment {
         }
 
         void bindTask(Task task){
+            this.task = task;
             Log.d(TAG, "received a task "+task);
             mTaskTitle.setText(task.getTaskTitle());
             recuranceTypeDisplayer.setText(getRecuranceText(task));

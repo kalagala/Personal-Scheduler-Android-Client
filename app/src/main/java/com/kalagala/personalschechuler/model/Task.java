@@ -14,6 +14,7 @@ import java.util.UUID;
 public class Task {
     @PrimaryKey
     @NonNull
+    @ColumnInfo(name = "task_id")
     private UUID taskId;
 
     @ColumnInfo(name = "task_name")
@@ -54,9 +55,9 @@ public class Task {
         taskEndTime = task.taskEndTime;
         dayOfWeek = task.dayOfWeek;
         date = task.date;
-        taskDateHasBeenEnteredByUser = false;
-        taskEndTimeHasBeenEnteredByUser = false;
-        taskStartTimeHasBeenEnteredByUser = false;
+        taskDateHasBeenEnteredByUser = task.taskDateHasBeenEnteredByUser;
+        taskEndTimeHasBeenEnteredByUser = task.taskEndTimeHasBeenEnteredByUser;
+        taskStartTimeHasBeenEnteredByUser = task.taskStartTimeHasBeenEnteredByUser;
 
     }
     public Task(){
