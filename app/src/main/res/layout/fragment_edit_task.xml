@@ -11,9 +11,11 @@
         android:layout_height="match_parent"
         android:layout_marginRight="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_weight="0.7">
+        android:layout_weight="0.6">
 
         <TextView
+
+            style="@style/level_1_text"
             android:id="@+id/edit_task_task_title_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -6,9 +6,12 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@color/colorBackground</item>
-        <item name="android:textColor">@color/colorText</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
         <item name="android:windowLightNavigationBar">true</item>
-        <item name="android:navigationBarColor">@color/background_material_light</item>
+
     </style>
 </resources>
+

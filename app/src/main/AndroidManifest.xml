@@ -23,7 +23,6 @@
         </activity>
         <activity
             android:name=".activities.ShowTasksActivity">
-
         </activity>
         <activity
             android:name=".activities.CreateTaskActivity">
