@@ -21,7 +21,6 @@
             android:gravity="center"
             android:text="@string/new_task"
 
-            style="@style/level_1_text"
             android:textSize="36sp"
             android:textStyle="bold"
 
@@ -99,7 +98,6 @@
                         android:focusable="false"
                         android:inputType="text"
 
-                        style="@style/level_1_text"
                         android:layout_marginRight="15dp"
                         android:ems="3" />
 
@@ -113,7 +111,6 @@
 
                     <EditText
 
-                        style="@style/level_1_text"
                         android:id="@+id/task_end_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

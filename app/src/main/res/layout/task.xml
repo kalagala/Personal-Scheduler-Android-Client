@@ -36,7 +36,6 @@
                 android:layout_height="match_parent"
                 android:textStyle="bold"
 
-                style="@style/level_1_text"
                 tools:text="Workout" />
 
             <TextView
@@ -48,7 +47,6 @@
 
             <TextView
 
-                style="@style/level_1_text"
                 android:id="@+id/recurance_displayer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -73,7 +71,6 @@
 
                 <TextView
 
-                    style="@style/level_1_text"
                     android:id="@+id/task_start_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -89,7 +86,6 @@
 
                 <TextView
 
-                    style="@style/level_1_text"
                     android:id="@+id/task_end_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

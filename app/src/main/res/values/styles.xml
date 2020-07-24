@@ -1,33 +1,26 @@
-
 <resources>
-<!-- Base application theme. -->
-<style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
-    <!-- Customize your theme here. -->
-    <item name="colorPrimary">@color/colorPrimary</item>
-    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-    <item name="colorAccent">@color/colorAccent</item>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
 
-    <item name="windowNoTitle">true</item>
-    <item name="android:statusBarColor">@android:color/transparent</item>
-    <item name="android:windowBackground">@color/colorBackground</item>-->
-    <item name="android:textColor">@color/colorText</item>-->
-</style>
-<style name="AppTheme.NoActionBar">
-    <item name="windowActionBar">false</item>-->
-    <item name="windowNoTitle">true</item>-->
-</style>
-
-<style name="level_3_text">
-    <item name="android:textColor">@color/level_3_color</item>
-</style>
-
-<style name="level_2_text">
-    <item name="android:textColor">@color/level_2_color</item>
-</style>
-
-    <style name="level_1_text">
-        <item name="android:textColor">@color/level_2_color</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+       <item name="android:windowBackground">@color/colorBackground</item>-->
+        <item name="android:textColor">@color/colorText</item>-->
+    </style>
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>-->
+        <item name="windowNoTitle">true</item>-->
     </style>
 
+    <style name="level_3_text">
+        <item name="android:textColor">@color/level_3_color</item>
+    </style>
+
+    <style name="level_2_text">
+        <item name="android:textColor">@color/level_2_color</item>
+    </style>
 
 </resources>

@@ -15,7 +15,6 @@
 
         <TextView
 
-            style="@style/level_1_text"
             android:id="@+id/edit_task_task_title_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
