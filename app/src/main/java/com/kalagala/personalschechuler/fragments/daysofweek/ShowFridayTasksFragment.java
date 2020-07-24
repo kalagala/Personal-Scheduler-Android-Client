@@ -94,7 +94,9 @@ public class ShowFridayTasksFragment extends Fragment {
 
                 }
 
-
+                if (thisDayTasks.size()!=0){
+                    mNoTasksTextview.setVisibility(View.INVISIBLE);
+                }
                 taskAdapter.setTasks(thisDayTasks);
                 mTasks = thisDayTasks;
             }
@@ -105,9 +107,6 @@ public class ShowFridayTasksFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-//         for(int i=0; i<10; i++){
-//            tasks.add(new Task());
-//         }
         View view =inflater.inflate(R.layout.day_tasks_fragment, container, false);
         mRecyclerView =(RecyclerView) view.findViewById(R.id.tasks_container);
         mNoTasksTextview = (TextView) view.findViewById(R.id.not_task_text);
@@ -120,27 +119,11 @@ public class ShowFridayTasksFragment extends Fragment {
     }
 
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        taskViewModel.getAllTasks().observe(this, new Observer<List<Task>>() {
-            @Override
-            public void onChanged(List<Task> tasks) {
-                if (tasks.size()!=0){
-                    mNoTasksTextview.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
-        Log.d(TAG, "on Start called");
-    }
+
 
     class TaskAdapter extends RecyclerView.Adapter<TaskHolder>{
         List<Task> mTasks;
         LayoutInflater layoutInflater;
-
-//        TaskAdapter(List<Task> tasks){
-//            mTasks = tasks;
-//        }
 
         TaskAdapter(Context context){
             layoutInflater.from(context);

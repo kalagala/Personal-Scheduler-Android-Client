@@ -94,7 +94,9 @@ public class ShowThursdayTasksFragment extends Fragment {
 
                 }
 
-
+                if (thisDayTasks.size()!=0){
+                    mNoTasksTextview.setVisibility(View.INVISIBLE);
+                }
                 taskAdapter.setTasks(thisDayTasks);
                 mTasks = thisDayTasks;
             }
@@ -120,19 +122,6 @@ public class ShowThursdayTasksFragment extends Fragment {
     }
 
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        taskViewModel.getAllTasks().observe(this, new Observer<List<Task>>() {
-            @Override
-            public void onChanged(List<Task> tasks) {
-                if (tasks.size()!=0){
-                    mNoTasksTextview.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
-        Log.d(TAG, "on Start called");
-    }
 
     class TaskAdapter extends RecyclerView.Adapter<TaskHolder>{
         List<Task> mTasks;
