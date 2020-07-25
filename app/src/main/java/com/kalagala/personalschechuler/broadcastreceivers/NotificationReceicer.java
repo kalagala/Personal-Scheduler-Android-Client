@@ -1,4 +1,4 @@
-package com.kalagala.personalschechuler;
+package com.kalagala.personalschechuler.broadcastreceivers;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -12,6 +12,7 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import com.kalagala.personalschechuler.R;
 import com.kalagala.personalschechuler.activities.SplashActivity;
 
 import java.util.UUID;

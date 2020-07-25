@@ -8,7 +8,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.kalagala.personalschechuler.R;
-import com.kalagala.personalschechuler.ReminderServices;
 
 public class SplashActivity extends AppCompatActivity {
     private static final long SPLASH_DISPLAY_LENGTH = 1000;

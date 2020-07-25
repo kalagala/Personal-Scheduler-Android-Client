@@ -144,12 +144,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="invisible">
 
             <RadioGroup
+                android:id="@+id/task_color_chooser_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/task_color_chooser_container"
                 android:gravity="center"
                 android:orientation="horizontal">
 

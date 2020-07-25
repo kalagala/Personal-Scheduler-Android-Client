@@ -1,13 +1,9 @@
 package com.kalagala.personalschechuler.fragments;
 
-import android.app.AlarmManager;
 import android.app.Application;
 import android.app.DatePickerDialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,7 +33,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.kalagala.personalschechuler.NotificationReceicer;
 import com.kalagala.personalschechuler.R;
 import com.kalagala.personalschechuler.database.AppPersistentData;
 import com.kalagala.personalschechuler.model.AlertType;
@@ -54,11 +49,8 @@ import com.kalagala.personalschechuler.viewmodel.TaskViewModel;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class CreateTaskFrament extends Fragment{
     public static final String FRAGMENT_PURPOSE="Fragment_Purpose";

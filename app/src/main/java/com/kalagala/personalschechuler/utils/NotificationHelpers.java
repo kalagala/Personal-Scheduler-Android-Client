@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.kalagala.personalschechuler.NotificationReceicer;
+import com.kalagala.personalschechuler.broadcastreceivers.NotificationReceicer;
 import com.kalagala.personalschechuler.model.AlertType;
 import com.kalagala.personalschechuler.model.Task;
 
