@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.kalagala.personalschechuler.R;
+import com.kalagala.personalschechuler.ReminderServices;
 
 public class SplashActivity extends AppCompatActivity {
     private static final long SPLASH_DISPLAY_LENGTH = 1000;
@@ -15,6 +16,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_splash);
         new Handler().postDelayed(new Runnable(){
             @Override

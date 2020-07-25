@@ -29,9 +29,11 @@
         <item name="only_on">Only On</item>
     </string-array>
     <string-array name="alert_mode">
-        <item name="daily">Alarm</item>
+<!--        <item name="daily">Alarm</item>-->
+
         <item name="once">Notification</item>
         <item name="only_on">Silence</item>
+
     </string-array>
     <string-array name="days_of_week_short">
         <item name="monday_short">Mon</item>

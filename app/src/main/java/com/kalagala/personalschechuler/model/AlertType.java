@@ -1,9 +1,8 @@
 package com.kalagala.personalschechuler.model;
 
 public enum  AlertType {
-    ALARM(0),
-    NOTIFICATION(1),
-    SILENT(2);
+    NOTIFICATION(0),
+    SILENT(1);
     private AlertType(int id){
         this.id = id;
     }

@@ -97,6 +97,8 @@ public class ShowWednesdayTasksFragment extends Fragment {
 
                 if (thisDayTasks.size()!=0){
                     mNoTasksTextview.setVisibility(View.INVISIBLE);
+                }else {
+                    mNoTasksTextview.setVisibility(View.VISIBLE);
                 }
                 taskAdapter.setTasks(thisDayTasks);
                 mTasks = thisDayTasks;
@@ -212,7 +214,7 @@ public class ShowWednesdayTasksFragment extends Fragment {
 
         private int getAlertTypeIcon(Task task) {
             switch (task.getAlertType()){
-                case ALARM: return R.drawable.ic_baseline_access_alarm_24;
+                //case ALARM: return R.drawable.ic_baseline_access_alarm_24;
                 case SILENT: return R.drawable.silence_icon;
                 case NOTIFICATION: return R.drawable.notification_icon;
             }

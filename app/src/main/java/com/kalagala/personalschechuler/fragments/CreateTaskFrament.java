@@ -1,9 +1,13 @@
 package com.kalagala.personalschechuler.fragments;
 
+import android.app.AlarmManager;
 import android.app.Application;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,6 +37,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.kalagala.personalschechuler.NotificationReceicer;
 import com.kalagala.personalschechuler.R;
 import com.kalagala.personalschechuler.database.AppPersistentData;
 import com.kalagala.personalschechuler.model.AlertType;
@@ -41,6 +46,7 @@ import com.kalagala.personalschechuler.model.TaskRecurrence;
 import com.kalagala.personalschechuler.model.Task;
 import com.kalagala.personalschechuler.model.TaskColor;
 import com.kalagala.personalschechuler.model.ValidationResponse;
+import com.kalagala.personalschechuler.utils.NotificationHelpers;
 import com.kalagala.personalschechuler.utils.ValidationAsync;
 import com.kalagala.personalschechuler.utils.ValidationSync;
 import com.kalagala.personalschechuler.viewmodel.TaskViewModel;
@@ -48,8 +54,11 @@ import com.kalagala.personalschechuler.viewmodel.TaskViewModel;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class CreateTaskFrament extends Fragment{
     public static final String FRAGMENT_PURPOSE="Fragment_Purpose";
@@ -372,6 +381,7 @@ public class CreateTaskFrament extends Fragment{
         if (validationResponse.isValid()){
             Log.d(TAG, "task has been verified against tasks from db and is now getting inserted to db");
             taskViewModel.insert(task);
+            new NotificationHelpers(getActivity(), task).createNotification();
             Toast toast = Toast.makeText(getActivity()
                             , R.string.task_create_successfully, Toast.LENGTH_SHORT);
                     toast.show();
@@ -386,6 +396,7 @@ public class CreateTaskFrament extends Fragment{
             addTaskButton.setEnabled(true);
         }
     }
+
 
     private class GetDbTasks extends AsyncTask<Void, Void, List<Task>>{
 
