@@ -42,6 +42,7 @@ import com.kalagala.personalschechuler.model.TaskRecurrence;
 import com.kalagala.personalschechuler.model.Task;
 import com.kalagala.personalschechuler.model.TaskColor;
 import com.kalagala.personalschechuler.model.ValidationResponse;
+import com.kalagala.personalschechuler.utils.NotificationHelpers;
 import com.kalagala.personalschechuler.utils.ValidationAsync;
 import com.kalagala.personalschechuler.utils.ValidationSync;
 import com.kalagala.personalschechuler.viewmodel.TaskViewModel;
@@ -166,6 +167,7 @@ public class EditTaskFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 // Continue with delete operation
                                 taskViewModel.delete(task);
+                                new NotificationHelpers(getActivity(), task).deleteNotification();
                                 Toast toast = Toast.makeText(getActivity()
                                         , R.string.task_deleted_successfully, Toast.LENGTH_SHORT);
                                 toast.show();
@@ -440,6 +442,8 @@ public class EditTaskFragment extends Fragment {
         if (validationResponse.isValid()) {
             Log.d(TAG, "task has been verified against tasks from db and is now getting ed to db");
             taskViewModel.insert(task);
+            new NotificationHelpers(getActivity(), task).deleteNotification();
+            new NotificationHelpers(getActivity(), task).createNotification();
             Toast toast = Toast.makeText(getActivity()
                     , R.string.task_updated_successfully, Toast.LENGTH_SHORT);
             toast.show();

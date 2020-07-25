@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Random;
 import java.util.UUID;
 
 @Entity(tableName = "task")
@@ -16,6 +17,9 @@ public class Task {
     @NonNull
     @ColumnInfo(name = "task_id")
     private UUID taskId;
+
+    @ColumnInfo(name = "notification_id")
+    private int notificationId;
 
     @ColumnInfo(name = "task_name")
     private String taskTitle;
@@ -58,6 +62,7 @@ public class Task {
         taskDateHasBeenEnteredByUser = task.taskDateHasBeenEnteredByUser;
         taskEndTimeHasBeenEnteredByUser = task.taskEndTimeHasBeenEnteredByUser;
         taskStartTimeHasBeenEnteredByUser = task.taskStartTimeHasBeenEnteredByUser;
+        notificationId = task.notificationId;
 
     }
     public Task(){
@@ -73,6 +78,15 @@ public class Task {
         taskDateHasBeenEnteredByUser = false;
         taskEndTimeHasBeenEnteredByUser = false;
         taskStartTimeHasBeenEnteredByUser = false;
+        notificationId = (new Random()).nextInt();
+    }
+
+    public int getNotificationId() {
+        return notificationId;
+    }
+
+    public void setNotificationId(int notificationId) {
+        this.notificationId = notificationId;
     }
 
     @Override

@@ -26,11 +26,11 @@ public class NotificationReceicer extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "received a task "+intent);
         String tasktitle = (intent.getExtras()).getString(TITLE);
-        UUID taskId = UUID.fromString((intent.getExtras()).getString(TASK_ID));
+        int notificationId= (intent.getExtras()).getInt(TASK_ID);
         NotificationManager notificationManager =(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent application = new Intent(context, SplashActivity.class);
         application.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, taskId.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         createNotificationChannel(context);
         Notification notification= new NotificationCompat.Builder(context,CHANNEL_ID)
                 .setContentIntent(pendingIntent)
@@ -41,7 +41,7 @@ public class NotificationReceicer extends BroadcastReceiver {
                 .build();
 
 
-        notificationManager.notify(taskId.hashCode(),notification);
+        notificationManager.notify(notificationId,notification);
     }
 
 
