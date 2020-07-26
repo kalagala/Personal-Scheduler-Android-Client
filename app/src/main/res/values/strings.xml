@@ -80,4 +80,6 @@
     <string name="delete_title">Delete Task</string>
     <string name="delete_task_message">You are about to delete a task, this action is irriversible. Are you sure you want to continue</string>
     <string name="task_updated_successfully">Task Updated Successfully</string>
+    <string name="time_frame_not_availbale">Time Frame Not Available</string>
+    <string name="there_is_task_between">There is a task called %s in between start and end time of the task you are trying to create</string>
 </resources>

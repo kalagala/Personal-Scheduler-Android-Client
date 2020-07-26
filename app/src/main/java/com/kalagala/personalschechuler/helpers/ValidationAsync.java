@@ -124,11 +124,6 @@ public class ValidationAsync {
                 taskFromDb.getTaskStartTime(),
                 taskFromDb.getTaskEndTime()
         )) {
-//            showInfoDialogWithCustomString(
-//                    R.string.start_time_not_available,
-//                    R.string.task_available_at_specified_time,
-//                    taskFromDb.getTaskTitle()
-//            );
             return new ValidationResponse(
                     false,
                     R.string.start_time_not_available,
@@ -143,20 +138,25 @@ public class ValidationAsync {
                         taskFromDb.getTaskStartTime(),
                         taskFromDb.getTaskEndTime()
                 )) {
-//            showInfoDialogWithCustomString(
-//                    R.string.task_end_time_not_available,
-//                    R.string.task_end_time_available_at_specified_time,
-//                    taskFromDb.getTaskTitle()
-//            );
             return new ValidationResponse(
                     false,
                     R.string.task_end_time_not_available,
                     R.string.task_end_time_available_at_specified_time,
                     taskFromDb.getTaskTitle()
             );
+        }else if(thereIsATaskInBetweenNewTaskTimeFrame(newTask, taskFromDb)){
+            return new ValidationResponse(
+                    false,
+                    R.string.time_frame_not_availbale,
+                    R.string.there_is_task_between,
+                    taskFromDb.getTaskTitle()
+            );
         }
         return new ValidationResponse(true);
     }
+
+
+
     private ValidationResponse onlyOnTaskHasNoConflictWithExistingTask(Task taskFromDb){
         switch (taskFromDb.getTaskRecurrence()){
             case ONLY_ON:
@@ -183,6 +183,10 @@ public class ValidationAsync {
     private boolean newTaskTimeIsBetweenExistingTaskTime(LocalTime newTasktime, LocalTime existingTaskStartTime, LocalTime existingTaskEndTime){
         return ((newTasktime.isAfter(existingTaskStartTime))&&(newTasktime.isBefore(existingTaskEndTime)));
 
+    }
+
+    private boolean thereIsATaskInBetweenNewTaskTimeFrame(Task newTask, Task taskFromDb) {
+        return (newTask.getTaskStartTime().isBefore(taskFromDb.getTaskStartTime()) && newTask.getTaskEndTime().isAfter(taskFromDb.getTaskEndTime()));
     }
 
 }
