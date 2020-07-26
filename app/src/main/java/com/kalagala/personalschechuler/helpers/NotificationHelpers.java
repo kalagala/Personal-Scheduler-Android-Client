@@ -1,4 +1,4 @@
-package com.kalagala.personalschechuler.utils;
+package com.kalagala.personalschechuler.helpers;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -35,6 +35,8 @@ public class NotificationHelpers {
         Log.d(TAG, "creating a notification with id "+task.getNotificationId());
         intent.putExtra(NotificationReceicer.TITLE, task.getTaskTitle());
         intent.putExtra(NotificationReceicer.TASK_ID, task.getNotificationId());
+        intent.putExtra(NotificationReceicer.START_TIME, task.getTaskStartTime().toString());
+        intent.putExtra(NotificationReceicer.END_TIME, task.getTaskEndTime().toString());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context.getApplicationContext(),
                 task.getNotificationId(),
@@ -72,8 +74,7 @@ public class NotificationHelpers {
         switch (task.getTaskRecurrence()){
             case ONLY_ON:
                 if (task.getAlertType() == AlertType.NOTIFICATION){
-                    DayOfWeek taskDayOfWeek = task.getDayOfWeek();
-                    calendar.set(Calendar.DAY_OF_WEEK, taskDayOfWeek.getValue());
+                    calendar.set(Calendar.DAY_OF_WEEK, convertToCalenderDay());
                     calendar.set(Calendar.HOUR_OF_DAY, task.getTaskStartTime().getHour());
                     calendar.set(Calendar.MINUTE, task.getTaskStartTime().getMinute());
                     calendar.set(Calendar.SECOND, 0);
@@ -119,6 +120,20 @@ public class NotificationHelpers {
 
                 break;
         }
+    }
+
+    private int convertToCalenderDay() {
+        switch (task.getDayOfWeek()){
+            case SUNDAY: return Calendar.SUNDAY;
+            case MONDAY: return Calendar.MONDAY;
+            case TUESDAY: return Calendar.TUESDAY;
+            case WEDNESDAY: return Calendar.WEDNESDAY;
+            case THURSDAY: return Calendar.THURSDAY;
+            case FRIDAY: return Calendar.FRIDAY;
+            case SATURDAY: return Calendar.SATURDAY;
+
+        }
+        return 0;
     }
 
 }

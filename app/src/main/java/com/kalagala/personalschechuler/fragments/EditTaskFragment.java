@@ -42,9 +42,9 @@ import com.kalagala.personalschechuler.model.TaskRecurrence;
 import com.kalagala.personalschechuler.model.Task;
 import com.kalagala.personalschechuler.model.TaskColor;
 import com.kalagala.personalschechuler.model.ValidationResponse;
-import com.kalagala.personalschechuler.utils.NotificationHelpers;
-import com.kalagala.personalschechuler.utils.ValidationAsync;
-import com.kalagala.personalschechuler.utils.ValidationSync;
+import com.kalagala.personalschechuler.helpers.NotificationHelpers;
+import com.kalagala.personalschechuler.helpers.ValidationAsync;
+import com.kalagala.personalschechuler.helpers.ValidationSync;
 import com.kalagala.personalschechuler.viewmodel.TaskViewModel;
 
 import java.time.DayOfWeek;
@@ -52,6 +52,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 public class EditTaskFragment extends Fragment {
     private static final String TAG = "EditTaskFragment";
@@ -441,8 +442,9 @@ public class EditTaskFragment extends Fragment {
 
         if (validationResponse.isValid()) {
             Log.d(TAG, "task has been verified against tasks from db and is now getting ed to db");
-            taskViewModel.insert(task);
             new NotificationHelpers(getActivity(), task).deleteNotification();
+            task.setNotificationId(new Random().nextInt());
+            taskViewModel.insert(task);
             new NotificationHelpers(getActivity(), task).createNotification();
             Toast toast = Toast.makeText(getActivity()
                     , R.string.task_updated_successfully, Toast.LENGTH_SHORT);

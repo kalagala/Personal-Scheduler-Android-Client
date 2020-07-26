@@ -18,6 +18,8 @@ import com.kalagala.personalschechuler.activities.SplashActivity;
 import java.util.UUID;
 
 public class NotificationReceicer extends BroadcastReceiver {
+    public static final String START_TIME = "START_TIME";
+    public static final String END_TIME = "END_TIME";
     public static String TAG = "NotificationReceiver";
     public static final String TASK_ID = "task id";
     final String CHANNEL_ID = "new picture alert";
@@ -26,7 +28,9 @@ public class NotificationReceicer extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "received a task "+intent);
-        String tasktitle = (intent.getExtras()).getString(TITLE);
+        String taskTitle = (intent.getExtras()).getString(TITLE);
+        String taskStartTime = (intent.getExtras()).getString(START_TIME);
+        String taskEndTime = (intent.getExtras()).getString(END_TIME);
         int notificationId= (intent.getExtras()).getInt(TASK_ID);
         NotificationManager notificationManager =(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent application = new Intent(context, SplashActivity.class);
@@ -36,7 +40,8 @@ public class NotificationReceicer extends BroadcastReceiver {
         Notification notification= new NotificationCompat.Builder(context,CHANNEL_ID)
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(R.drawable.notification_icon)
-                .setContentTitle(tasktitle+" time")
+                .setContentTitle("Time for "+taskTitle)
+                .setContentText("From "+taskStartTime+" To "+taskEndTime)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true)
                 .build();

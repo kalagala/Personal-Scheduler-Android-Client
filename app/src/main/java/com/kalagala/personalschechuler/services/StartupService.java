@@ -1,17 +1,15 @@
 package com.kalagala.personalschechuler.services;
 
-import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.JobIntentService;
 
 import com.kalagala.personalschechuler.database.AppPersistentData;
 import com.kalagala.personalschechuler.model.Task;
 import com.kalagala.personalschechuler.model.TaskDao;
-import com.kalagala.personalschechuler.utils.NotificationHelpers;
+import com.kalagala.personalschechuler.helpers.NotificationHelpers;
 
 import java.util.List;
 

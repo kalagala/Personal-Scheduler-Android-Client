@@ -1,4 +1,4 @@
-package com.kalagala.personalschechuler.utils;
+package com.kalagala.personalschechuler.helpers;
 
 import com.kalagala.personalschechuler.R;
 import com.kalagala.personalschechuler.model.Task;

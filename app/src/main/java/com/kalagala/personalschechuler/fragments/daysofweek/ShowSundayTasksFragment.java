@@ -20,14 +20,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kalagala.personalschechuler.R;
-import com.kalagala.personalschechuler.activities.CreateTaskActivity;
 import com.kalagala.personalschechuler.activities.EditTaskActivity;
 import com.kalagala.personalschechuler.model.Task;
-import com.kalagala.personalschechuler.utils.DateHelpers;
+import com.kalagala.personalschechuler.helpers.DateHelpers;
 import com.kalagala.personalschechuler.viewmodel.TaskViewModel;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;

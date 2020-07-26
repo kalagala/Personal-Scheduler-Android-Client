@@ -1,16 +1,9 @@
-package com.kalagala.personalschechuler.utils;
+package com.kalagala.personalschechuler.helpers;
 
 
-import android.app.Activity;
-import android.content.DialogInterface;
 import android.util.Log;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-
 import com.kalagala.personalschechuler.R;
-import com.kalagala.personalschechuler.database.TaskRepository;
 import com.kalagala.personalschechuler.model.Task;
 import com.kalagala.personalschechuler.model.ValidationResponse;
 
@@ -29,6 +22,9 @@ public class ValidationAsync {
         int iteration =0;
         ValidationResponse validationResponse;
         for (Task taskFromDb: allTasksFromDb){
+            if (newTask.getTaskId().toString().equals(taskFromDb.getTaskId().toString())){
+                continue;
+            }
             Log.d(TAG, "iteration "+iteration);
             iteration++;
             Log.d(TAG, "Checking if \n"+newTask+"\n has Conflict With taskfrom db \n"+taskFromDb);

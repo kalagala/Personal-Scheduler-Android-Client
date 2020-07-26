@@ -41,9 +41,9 @@ import com.kalagala.personalschechuler.model.TaskRecurrence;
 import com.kalagala.personalschechuler.model.Task;
 import com.kalagala.personalschechuler.model.TaskColor;
 import com.kalagala.personalschechuler.model.ValidationResponse;
-import com.kalagala.personalschechuler.utils.NotificationHelpers;
-import com.kalagala.personalschechuler.utils.ValidationAsync;
-import com.kalagala.personalschechuler.utils.ValidationSync;
+import com.kalagala.personalschechuler.helpers.NotificationHelpers;
+import com.kalagala.personalschechuler.helpers.ValidationAsync;
+import com.kalagala.personalschechuler.helpers.ValidationSync;
 import com.kalagala.personalschechuler.viewmodel.TaskViewModel;
 
 import java.time.DayOfWeek;

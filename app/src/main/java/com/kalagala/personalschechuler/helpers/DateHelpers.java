@@ -1,4 +1,4 @@
-package com.kalagala.personalschechuler.utils;
+package com.kalagala.personalschechuler.helpers;
 
 import android.util.Log;
 

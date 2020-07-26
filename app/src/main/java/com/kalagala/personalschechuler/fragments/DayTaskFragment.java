@@ -24,14 +24,11 @@ import com.kalagala.personalschechuler.fragments.daysofweek.ShowSundayTasksFragm
 import com.kalagala.personalschechuler.fragments.daysofweek.ShowThursdayTasksFragment;
 import com.kalagala.personalschechuler.fragments.daysofweek.ShowTuesdayTasksFragment;
 import com.kalagala.personalschechuler.fragments.daysofweek.ShowWednesdayTasksFragment;
-import com.kalagala.personalschechuler.utils.DateHelpers;
+import com.kalagala.personalschechuler.helpers.DateHelpers;
 
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
-import java.time.temporal.WeekFields;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.TimeZone;
 
 public class DayTaskFragment extends Fragment {
