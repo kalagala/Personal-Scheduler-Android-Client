@@ -24,6 +24,7 @@ import com.kalagala.personalschechuler.fragments.daysofweek.ShowSundayTasksFragm
 import com.kalagala.personalschechuler.fragments.daysofweek.ShowThursdayTasksFragment;
 import com.kalagala.personalschechuler.fragments.daysofweek.ShowTuesdayTasksFragment;
 import com.kalagala.personalschechuler.fragments.daysofweek.ShowWednesdayTasksFragment;
+import com.kalagala.personalschechuler.utils.DateHelpers;
 
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
@@ -64,7 +65,7 @@ public class DayTaskFragment extends Fragment {
 
         new TabLayoutMediator(daysTab, tasksPager,
                 (tab, position)->{
-                    String tabText = getDayAndDate(position);
+                    String tabText = getDayAndDate(position+1);
                     tab.setText(tabText);
                     tasksPager.setCurrentItem(tab.getPosition(), true);
                 }
@@ -73,7 +74,6 @@ public class DayTaskFragment extends Fragment {
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         day--;
-        Log.d(TAG, "it is "+DayOfWeek.of(day)+" acording to calender");
         tasksPager.setCurrentItem(day-1);
 
 //        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
@@ -128,49 +128,14 @@ public class DayTaskFragment extends Fragment {
     }
 
     private String getDayAndDate(int forDayOfTheWeek) {
-        Log.d(TAG, "get day and date called with position "+forDayOfTheWeek);
-        final DayOfWeek firstDayOfWeek = WeekFields.of(Locale.getDefault()).getFirstDayOfWeek();
-        final DayOfWeek lastDayOfWeek = DayOfWeek.of(((firstDayOfWeek.getValue() + 5) % DayOfWeek.values().length) + 1);
-//        Log.d(TAG, "first day of Week is "+firstDayOfWeek);
-//        Log.d(TAG, "last Day of week is "+lastDayOfWeek);
-        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
 
-        Date todayDate = calendar.getTime();
-        Log.d(TAG, "\ntoday is "+todayDate);
-
-        calendar.setTime(todayDate);
-        int thisDayOfTheWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        thisDayOfTheWeek--;
-        Date date = getThisDaysDate(thisDayOfTheWeek, forDayOfTheWeek+1, todayDate);
-        Log.d(TAG, "todays day of the week is "+DayOfWeek.of(thisDayOfTheWeek-1));
-        Log.d(TAG, "date for day "+DayOfWeek.of(forDayOfTheWeek+1)+" is "+date+"\n");
+        Date date = new DateHelpers().getThisDaysDate(forDayOfTheWeek);
         SimpleDateFormat formatter = new SimpleDateFormat("E, dd");
         String formattedDate = formatter.format(date);
         return  formattedDate;
     }
 
-    private Date getThisDaysDate(int currentDayOfWeek, int dayToGetDateOf, Date today) {
 
-        Log.d(TAG, "trying to get date for "+DayOfWeek.of(dayToGetDateOf));
-        Log.d(TAG, "today is "+DayOfWeek.of(currentDayOfWeek));
-        if (currentDayOfWeek>dayToGetDateOf){
-            for (int j = currentDayOfWeek; j>=dayToGetDateOf; j--){
-                if (j==dayToGetDateOf){
-                    return new Date(today.getTime() - ((currentDayOfWeek-dayToGetDateOf)*24 * 3600000));
-                }
-            }
-        }else if(currentDayOfWeek<dayToGetDateOf){
-            for (int j = currentDayOfWeek; j<=dayToGetDateOf; j++){
-                if (j==dayToGetDateOf){
-                    return new Date(today.getTime() + ((dayToGetDateOf-currentDayOfWeek)*24 * 3600000));
-                }
-            }
-        }else{
-            Log.d("DayFragment",currentDayOfWeek+"  "+dayToGetDateOf);
-            return today;
-        }
-        return null;
-    }
 
     private class DaysPagerAdapter extends FragmentStateAdapter {
         public DaysPagerAdapter(DayTaskFragment dayTaskFragment) {
@@ -188,29 +153,30 @@ public class DayTaskFragment extends Fragment {
             calendar.setTime(todayDate);
             int thisDayOfTheWeek = calendar.get(Calendar.DAY_OF_WEEK);
             thisDayOfTheWeek--;
-            Date date = getThisDaysDate(thisDayOfTheWeek, position+1, todayDate);
+            Date date = new DateHelpers().getThisDaysDate(position+1);
             switch (position){
                 case 0:
-                    Log.d(TAG, "creating monday task");
-                    return ShowMondayTasksFragment.newInstance(position, date);
-                case 1:
-                    Log.d(TAG, "creating tuesday task");
-                    return ShowTuesdayTasksFragment.newInstance(position, date);
-                case 2:
-                    Log.d(TAG, "creating wednesday task");
-                    return ShowWednesdayTasksFragment.newInstance(position, date);
-                case 3:
-                    Log.d(TAG, "creating thursday task");
-                    return ShowThursdayTasksFragment.newInstance(position, date);
-                case 4:
-                    Log.d(TAG, "creating friday task");
-                    return ShowFridayTasksFragment.newInstance(position, date);
-                case 5:
-                    Log.d(TAG, "creating saturday task");
-                    return ShowSaturdayTasksFragment.newInstance(position, date);
-                case 6:
                     Log.d(TAG, "creating sunday tasks");
                     return ShowSundayTasksFragment.newInstance(position, date);
+                case 1:
+                    Log.d(TAG, "creating monday task");
+                    return ShowMondayTasksFragment.newInstance(position, date);
+                case 2:
+                    Log.d(TAG, "creating tuesday task");
+                    return ShowTuesdayTasksFragment.newInstance(position, date);
+                case 3:
+                    Log.d(TAG, "creating wednesday task");
+                    return ShowWednesdayTasksFragment.newInstance(position, date);
+                case 4:
+                    Log.d(TAG, "creating thursday task");
+                    return ShowThursdayTasksFragment.newInstance(position, date);
+                case 5:
+                    Log.d(TAG, "creating friday task");
+                    return ShowFridayTasksFragment.newInstance(position, date);
+                case 6:
+                    Log.d(TAG, "creating saturday task");
+                    return ShowSaturdayTasksFragment.newInstance(position, date);
+
                 default: return null;
             }
 

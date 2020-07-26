@@ -23,6 +23,7 @@ import com.kalagala.personalschechuler.R;
 import com.kalagala.personalschechuler.activities.CreateTaskActivity;
 import com.kalagala.personalschechuler.activities.EditTaskActivity;
 import com.kalagala.personalschechuler.model.Task;
+import com.kalagala.personalschechuler.utils.DateHelpers;
 import com.kalagala.personalschechuler.viewmodel.TaskViewModel;
 
 import java.text.ParseException;
@@ -65,9 +66,7 @@ public class ShowSaturdayTasksFragment extends Fragment {
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
         Date todayDate = calendar.getTime();
         calendar.setTime(todayDate);
-        int thisDayOfTheWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        thisDayOfTheWeek--;
-        Date thisDaysDate = getThisDaysDate(thisDayOfTheWeek, dayOfWeek.getValue(), todayDate);
+        Date thisDaysDate = new DateHelpers().getThisDaysDate(dayOfWeek.getValue());
         LocalDate finalDate  = thisDaysDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         taskAdapter = new TaskAdapter(getActivity());
         taskViewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
@@ -243,28 +242,6 @@ public class ShowSaturdayTasksFragment extends Fragment {
             }
             return null;
         }
-    }
-    private Date getThisDaysDate(int currentDayOfWeek, int dayToGetDateOf, Date today) {
-
-        Log.d(TAG, "trying to get date for "+DayOfWeek.of(dayToGetDateOf));
-        Log.d(TAG, "today is "+DayOfWeek.of(currentDayOfWeek));
-        if (currentDayOfWeek>dayToGetDateOf){
-            for (int j = currentDayOfWeek; j>=dayToGetDateOf; j--){
-                if (j==dayToGetDateOf){
-                    return new Date(today.getTime() - ((currentDayOfWeek-dayToGetDateOf)*24 * 3600000));
-                }
-            }
-        }else if(currentDayOfWeek<dayToGetDateOf){
-            for (int j = currentDayOfWeek; j<=dayToGetDateOf; j++){
-                if (j==dayToGetDateOf){
-                    return new Date(today.getTime() + ((dayToGetDateOf-currentDayOfWeek)*24 * 3600000));
-                }
-            }
-        }else{
-            Log.d("DayFragment",currentDayOfWeek+"  "+dayToGetDateOf);
-            return today;
-        }
-        return null;
     }
 
 }
