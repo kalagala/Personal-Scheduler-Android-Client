@@ -71,56 +71,7 @@ public class DayTaskFragment extends Fragment {
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         day--;
-        tasksPager.setCurrentItem(day-1);
-
-//        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
-//        Date today = calendar.getTime();
-//        SimpleDateFormat formatter = new SimpleDateFormat("E, dd MMMM yyy");
-//        String formattedDate = formatter.format(today);
-//        //mTodaysDate.setText(formattedDate);
-//        calendar.setTime(today);
-//        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-//
-//        for (int i = 1; i<8; i++){
-//            View dayCard = getLayoutInflater().inflate(R.layout.day_of_a_week,null, false);
-//            int testResource;
-//            Date thisDaysDate;
-//            switch (i){
-//                case 2:
-//                    testResource=R.string.tuesday_short;
-//                    thisDaysDate = getThisDaysDate(dayOfWeek, i, today);
-//                    break;
-//                case 3:
-//                    testResource=R.string.wednesday_short;
-//                    thisDaysDate = getThisDaysDate(dayOfWeek, i, today);
-//                    break;
-//                case 4:
-//                    testResource=R.string.thursday_short;
-//                    thisDaysDate = getThisDaysDate(dayOfWeek, i, today);
-//                    break;
-//                case 5:
-//                    testResource=R.string.friday_short;
-//                    thisDaysDate = getThisDaysDate(dayOfWeek, i, today);
-//                    break;
-//
-//                case 6:
-//                    testResource=R.string.saturday_short;
-//                    thisDaysDate = getThisDaysDate(dayOfWeek, i, today);
-//                    break;
-//                case 7:
-//                    testResource=R.string.sunday_short;
-//                    thisDaysDate = getThisDaysDate(dayOfWeek, i, today);
-//                    break;
-//                default:
-//                    testResource=R.string.monday_short;
-//                    thisDaysDate = getThisDaysDate(dayOfWeek, i, today);
-//            }
-////            ((TextView)dayCard.findViewById(R.id.week_day)).setText(testResource);
-////            Calendar calendar1 = Calendar.getInstance(TimeZone.getDefault());
-////            calendar1.setTime(thisDaysDate);
-////            ((TextView)dayCard.findViewById(R.id.day_date)).setText(new Integer(calendar1.get(Calendar.DAY_OF_MONTH)).toString());
-////            mDaysOfWeek.addView(dayCard);
-//        }
+        tasksPager.setCurrentItem(day);
 
     }
 
@@ -148,8 +99,7 @@ public class DayTaskFragment extends Fragment {
             Log.d(TAG, "\ntoday is "+todayDate);
 
             calendar.setTime(todayDate);
-            int thisDayOfTheWeek = calendar.get(Calendar.DAY_OF_WEEK);
-            thisDayOfTheWeek--;
+
             Date date = new DateHelpers().getThisDaysDate(position+1);
             switch (position){
                 case 0:
