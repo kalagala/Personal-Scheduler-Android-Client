@@ -66,7 +66,7 @@ public class ShowSaturdayTasksFragment extends Fragment {
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
         Date todayDate = calendar.getTime();
         calendar.setTime(todayDate);
-        Date thisDaysDate = new DateHelpers().getThisDaysDate(dayOfWeek.getValue());
+        Date thisDaysDate = new DateHelpers().getThisDaysDate(7);
         LocalDate finalDate  = thisDaysDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         taskAdapter = new TaskAdapter(getActivity());
         taskViewModel = ViewModelProviders.of(this).get(TaskViewModel.class);

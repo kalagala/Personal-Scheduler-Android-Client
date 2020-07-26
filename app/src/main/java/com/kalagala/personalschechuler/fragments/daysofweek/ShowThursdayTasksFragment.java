@@ -66,7 +66,7 @@ public class ShowThursdayTasksFragment extends Fragment {
         calendar.setTime(todayDate);
         int thisDayOfTheWeek = calendar.get(Calendar.DAY_OF_WEEK);
         thisDayOfTheWeek--;
-        Date thisDaysDate = new DateHelpers().getThisDaysDate(dayOfWeek.getValue());
+        Date thisDaysDate = new DateHelpers().getThisDaysDate(5);
         LocalDate finalDate  = thisDaysDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
 
