@@ -19,6 +19,7 @@ public interface TaskDao {
 
     @Query("SELECT * FROM task ORDER BY task_start_time ASC")
     List<Task> getAllTasksSync();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertTask(Task task);
 
